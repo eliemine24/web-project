@@ -38,3 +38,7 @@ L'appli recommande successivement des titres choisis aléatoirement (recherche �
 
 - si oui, le titre est enregistré dans une playlist, les stats du titre sont enregistrées pour affiner l'algorithme de recommandations (ça paraît très difficile mais azy). 
 - si non, on exclut le genre/l'artiste des recoomandation ?. une fois le choix fait, on passe au titre suivant. 
+
+**Suggestion de Victor**
+
+Ne pas avoir de préférences de base et partir directement dans la recommandation aléatoire, puis affiner au fur et à mesure.
