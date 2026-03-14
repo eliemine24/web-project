@@ -1,25 +1,26 @@
-import logo from './logo.svg';
+
 import './App.css';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <div className="Container">
+          <h1>discover</h1>
+          <MyButton couleur="tomato" symbole="❤︎" top="400px" right= "20px"/>  
+          <MyButton couleur="blue" symbole="✗" top="400px" right= "220px"/>  
+        </div>
       </header>
     </div>
   );
 }
 
+
+function MyButton({couleur, symbole, top, right}) {
+  return (
+    <button className="Mon-bouton" style={{ backgroundColor: couleur,  top: top, right: right }}>
+      {symbole}
+    </button>
+  );
+}
 export default App;
