@@ -1,6 +1,6 @@
 
 import './App.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -39,15 +39,40 @@ function App() {
 }
 
 function PagePrincipale({count, handleCount, onFinish}){
+  const [track, setTrack] = useState(null);
+  const [audio] = useState(new Audio());
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  async function GetSong(){
+    try {
+      const response = await fetch('https://itunes.apple.com/search?term=sza&limit=5&entity=song');
+      const data = await response.json();
+      if (data.results && data.results[0]) {
+        const morceau = data.results[0];
+        setTrack(morceau);
+        audio.src = morceau.previewUrl;
+        audio.play().catch(e => console.log("Audio en attente..."));
+        setIsPlaying(true);}}
+    catch(error){
+      console.error("Erreur lors du fetch :", error);}
+  }
+
+
   return(
     <div className="Container">
       <div className="Compteur">{count} titres</div>
       <h1>discover</h1>
       <div className="Music-Card">
+        {!isPlaying ? (<ButtonStart onClick={GetSong}/>):(<>
+        <img 
+          src={track.artworkUrl100.replace('100x100', '400x400')} 
+          alt="cover" 
+          style={{ borderRadius: '15px', width: '100%' }} 
+        />
         <div className="Music-Info">
-          <h2>Song Title</h2>
-          <p>Artist Name</p>
-        </div>
+          <h2>{track.trackName}</h2>
+          <p>{track.artistName}</p>
+        </div></>)}
       </div>
       <MyButton couleur="#ff4458" symbole="❤︎" bottom="14%" right="15%" onClick={handleCount}/>  
       <MyButton couleur="#24292e" symbole="✗" bottom="14%" left="15%"/> 
@@ -57,13 +82,12 @@ function PagePrincipale({count, handleCount, onFinish}){
 
 }
 
-function PageResultat({count, onRestart}){
+function PageResultat({ count, onRestart }) {
   return(
-    <div className='Container'>
-    </div>
-  )
-
+  <div className='Container'>
+  </div>)
 }
+
 
 function MyButton({couleur, symbole, bottom, right, left, onClick}) {
   return (
@@ -90,6 +114,17 @@ function ButtonTerm({onClick}){
       onClick={onClick}
     >
       DONE !
+    </button>)
+}
+
+function ButtonStart({onClick}){
+  return(
+    <button 
+      className="Bouton-Start"
+      style={{bottom: '50%'}} 
+      onClick={onClick}
+    >
+      START!
     </button>)
 }
 export default App;
