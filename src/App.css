@@ -17,11 +17,16 @@
 .Container {
   background-color: #ffffff;
   color: black;
-  height: 100vh;
+  height: 90vh; 
+  max-height: 800px;
   aspect-ratio: 9 / 16;             
-  align-items: center;
-  justify-content: center;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto; 
+  border-radius: 20px; 
+  overflow: hidden;
 }
 
 .Container h1 {
@@ -32,18 +37,72 @@
 
 .Mon-bouton {
   position: absolute;  
-
-  margin-right: 10px;
-  margin-bottom: 100px;
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   color: white;
   font-size : 2rem;
   border: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
 .Mon-bouton:hover {
-  filter: brightness(0.95) saturate(95%);/* Il devient bleu-gris foncé au survol */
+  filter: brightness(0.95) saturate(95%);
   transform: scale(1.1);
 }
+
+.Compteur {
+  position: absolute;
+  top: 16%;
+  right: 8%;
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 0.9rem;
+}
+
+.Music-Card {
+  width: 80%;
+  height: 40%; 
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: #f9f9f9;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  margin-top: 20%; 
+}
+
+.Music-Info h2 { margin: 10px 0 5px 0; font-size: 1.4rem; }
+.Music-Info p { color: #666; margin-bottom: 20px; }
+
+.Bouton-Terminer {
+  position: absolute;
+  left : 50%;
+  transform: translateX(-50%); /*on centre*/
+  width: 180px; 
+  height: 35px;  
+  border-radius: 20px; 
+  background-color: transparent; 
+  color: #24292e; 
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  font-size: 0.85rem;
+  border: 1px solid #24292e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.Bouton-Terminer:hover {
+  filter: brightness(0.95) saturate(95%);
+  transform: translateX(-50%) scale(1.1);
+}
+
+
