@@ -10,7 +10,7 @@ Réaliser un **Générateur de playlists** à partir de plusieurs paramètres :
 
 ## Idées en vrac 
 
- Utiliser un **[API](https://publicapis.io/category/music)** pour trouver les titres/artistes/genres 
+ Utiliser un **[API](https://www.theaudiodb.com/free_music_api)** pour trouver les titres/artistes/genres 
  
  Utiliser un **framework** react
 

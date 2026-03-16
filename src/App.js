@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
 
 function App() {
+  const [data, setData] = useState(null);
+
+  async function fetchTrack() {
+    const response = await fetch(
+      "https://www.theaudiodb.com/api/v1/json/123/search.php?s=System+of+a+down"
+    );
+
+    const result = await response.json();
+
+    // stockage du JSON dans le state
+    setData(result);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ padding: 40 }}>
+      <h1>Recherche de titre</h1>
+
+      <button onClick={fetchTrack}>
+        Requête API
+      </button>
+
+      {data && (
+        <>
+          <h2>Résultat JSON</h2>
+
+          <pre>
+            {JSON.stringify(data, null, 2)}
+          </pre>
+        </>
+      )}
     </div>
   );
 }
