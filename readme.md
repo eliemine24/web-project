@@ -38,8 +38,7 @@ récupérer le jeton d'accès  (depuis un terminal):
 ```bash
 curl -X POST "https://accounts.spotify.com/api/token" \
      -H "Content-Type: application/x-www-form-urlencoded" \
-     -d "grant_type=client_credentials&client_id=8ab63044b4b74d928a900e1d56e912e1&client_secret=7d5abc5435ac48dcb07e525faf68168d"
-```
+     -d "grant_type=client_credentials&client_id=8ab63044b4b74d928a900e1d56e912e1&client_secret=ask-elie
 
 réponse spotify api :
 ```bash
