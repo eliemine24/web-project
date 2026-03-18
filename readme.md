@@ -54,3 +54,30 @@ réponse spotify api :
 ### [iTunes API](https://www.apple.com/itunes/)
 
 API permettant d'avoir accès a des extraits de trente seconde librement ça a l'air super
+
+
+## Architecture
+
+### Modèle
+
+- `repertoire-genres` (tableau, variable) : répertorie la liste des genres, leur id correspondant dans l'api, leur score de recommandation
+- `repertoire-genres` (tableau, variable) : répertorie la liste des artistes et leur id correspondant dans l'api, leur score de recommandation
+- `playlist` (tableau, variable) : enregistre les titres et artiste des musiques likée par l'utilisateur·ice
+
+### View
+
+- `recommandation` : cadre avec la recommandation de l'algo (image + extrait musical)
+- `like` : enregistre la musique actuellement proposée dans la playlist, met à jour le modèle (scores de recommandation des artistes/genres), passe à la recommandation suivante
+- `dislike` : met à jour les stats, passe à la recommandation suivante
+- `done` : fin de la session, affiche la page de stats et la playlist
+
+- `download playlist` : permet de télécharger un csv/json des musiques likées
+
+### Controller
+
+1. propose N musiques random pour commencer
+2. au bout des N musiques random, à partir des statistiques, renvoie les 6 recommandations suivantes : 
+  - 3 titres issus des genres appréciés
+  - 1 titre issu des artistes appréciés
+  - 2 titres aléatoires
+3. à la fin des 6 reco, recommence tant que `done` n'est pas appuyé. 
