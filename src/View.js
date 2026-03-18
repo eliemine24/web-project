@@ -2,7 +2,7 @@
 import './View.css';
 import React, { useState, useEffect } from 'react';
 
-function App() {
+function View() {
   const [count, setCount] = useState(0);
   const [screen, setScreen] = useState('discover');
   function handleCount(){
@@ -45,10 +45,10 @@ function PagePrincipale({count, handleCount, onFinish}){
 
   async function GetSong(){
     try {
-      const response = await fetch('https://itunes.apple.com/search?term=sza&limit=5&entity=song');
+      const response = await fetch('https://itunes.apple.com/search?term=pop&genreId=14&limit=50&entity=song');
       const data = await response.json();
-      if (data.results && data.results[0]) {
-        const morceau = data.results[0];
+      if (data.results && data.results[39]) {
+        const morceau = data.results[39];
         setTrack(morceau);
         audio.src = morceau.previewUrl;
         audio.play().catch(e => console.log("Audio en attente..."));
@@ -74,8 +74,8 @@ function PagePrincipale({count, handleCount, onFinish}){
           <p>{track.artistName}</p>
         </div></>)}
       </div>
-      <MyButton couleur="#ff4458" symbole="❤︎" bottom="14%" right="15%" onClick={handleCount}/>  
-      <MyButton couleur="#24292e" symbole="✗" bottom="14%" left="15%"/> 
+      <MyButton couleur="#ff4458" symbole="❤︎" bottom="17%" right="8%" onClick={handleCount}/>  
+      <MyButton couleur="#24292e" symbole="✗" bottom="17%" left="8%"/> 
       {count > 0 && (<ButtonTerm onClick={onFinish}/>)}
     </div>
     )
@@ -127,4 +127,4 @@ function ButtonStart({onClick}){
       START!
     </button>)
 }
-export default App;
+export default View;

@@ -37,11 +37,11 @@
 
 .Mon-bouton {
   position: absolute;  
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   color: white;
-  font-size : 2rem;
+  font-size : 1.6rem;
   border: none;
   cursor: pointer;
   transition: transform 0.2s;
@@ -56,7 +56,7 @@
 
 .Compteur {
   position: absolute;
-  top: 16%;
+  top: 14%;
   right: 8%;
   font-weight: bold;
   background: rgba(0, 0, 0, 0.1);
@@ -67,7 +67,7 @@
 
 .Music-Card {
   position : relative;
-  width: 58%;
+  width: 60%;
   height: 30%; 
   flex-direction: column;
   align-items: center;
@@ -76,10 +76,10 @@
   background: #f9f9f9;
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  margin-top: 20%; 
+  margin-top: 16%; 
 }
 
-.Music-Info h2 { margin: 0; font-size: 1.5rem; }
+.Music-Info h2 { margin: 0; font-size: 1.2rem; }
 .Music-Info p { color: #666; margin : 0; font-size: 1.1rem;}
 
 .Bouton-Terminer {
