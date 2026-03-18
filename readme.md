@@ -51,6 +51,6 @@ réponse spotify api :
 ```
 
 
-### [iTunes API](./lien-manquant)
+### [iTunes API](https://www.apple.com/itunes/)
 
 API permettant d'avoir accès a des extraits de trente seconde librement ça a l'air super
