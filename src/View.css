@@ -132,3 +132,9 @@
   transform: translateX(-50%) scale(1.1);
 }
 
+.Playlist-Scroll {
+  width: 300px;
+  height: 100px;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+}
