@@ -7,7 +7,7 @@ Algo de recommandation
 import mapArtistes from "./Model.js";
 import fs from 'fs/promises'; // Utilise le module file system
 import path from 'path';
-import { listeArtistes, listeGenres } from "./Model";
+/*import { listeArtistes, listeGenres } from "./Model.js";*/
 
 export default function Recommandations(number){
     /* demande 7 nouvelles reco via les autres fonctions*/
