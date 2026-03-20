@@ -4,7 +4,9 @@ Algo de recommandation
 
 */
 
-import mapArtistes from "./Model.js"
+import mapArtistes from "./Model.js";
+import fs from 'fs/promises'; // Utilise le module file system
+import path from 'path';
 
 export default function Recommandations(number){
     /* demande 7 nouvelles reco via les autres fonctions*/
@@ -70,12 +72,48 @@ function RecoArtiste(niveau) {
     return selection[indexAleatoire][0];}
 
 
-function RecoAleatoire(){
-    /* donne une reco aléatoire */
-    const noms = Array.from(mapArtistes.keys());
-    return noms[Math.floor(Math.random() * noms.length)];
-}
+async function RecoAleatoire(){
+    /* donne une reco aléatoire de genre*/
+    const cheminFichier = path.join(process.cwd(), 'listeGenresItunes.csv');
+    const data = await fs.readFile(cheminFichier, 'utf-8');
+    const lignes = data.split('\n').filter(ligne => ligne.trim() !== "");
 
+    const poidsSpeciaux = {
+        "Pop": 50,    // 10 fois plus de chances
+        "Rock": 40,
+        "Heavy Metal": 10,
+        "Alternative": 20,
+        "Electro": 20
+    };
+
+    const genres = lignes.slice(1).map(ligne => {const colonnes = ligne.split(',');
+        const nom = colonnes[1];
+        const poids = poidsSpeciaux[nom] || 1;
+
+        return {
+            nom: colonnes[1],
+            code: colonnes[3],
+            poids: poids
+        };
+        });
+
+    
+    const sommePoids = genres.reduce((acc, g) => acc + g.poids, 0);
+
+    let indexAleatoire = Math.random() * sommePoids;
+    for (const item of genres) {
+    if (indexAleatoire < item.poids) {
+        return {
+            nom: item.nom,
+            index: item.code
+        };
+    }
+    indexAleatoire -= item.poids;
+}}
+    
+
+const reco = await RecoAleatoire();
+console.log("Résultat final :", reco.nom, reco.index);
 
 function RequestMaker(){
     /* je renvoie le nom de l'artiste ou le nom du genre */
