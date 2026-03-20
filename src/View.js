@@ -47,6 +47,7 @@ function PagePrincipale({count, handleCount, onFinish}){
     try {
       const response = await fetch('https://itunes.apple.com/search?term=pop&genreId=14&limit=50&entity=song');
       const data = await response.json();
+      console.log(data);
       if (data.results && data.results[39]) {
         const morceau = data.results[39];
         setTrack(morceau);
