@@ -5,14 +5,13 @@ Algo de recommandation
 */
 
 import mapArtistes from "./Model.js";
-import fs from 'fs/promises'; // Utilise le module file system
-import path from 'path';
-/*import { listeArtistes, listeGenres } from "./Model.js";*/
 
-export default function Recommandations(number){
+//import { listeArtistes, listeGenres } from "./Model.js";
+
+/*export default function Recommandations(number){
     /* demande 7 nouvelles reco via les autres fonctions*/
     /* une fois les reco obtenues, applique le request maker dessus pour avoir les liens*/ 
-    var recos = [];
+    /*var recos = [];
     var url_recos = [];
     if (number%2 == 0){
         recos.push(RecoGenre(true, "haut"));
@@ -33,14 +32,29 @@ export default function Recommandations(number){
     for (const reco of recos){
         url_recos.push(RequestMaker(reco));
     }
-    return url_recos;}
+    return url_recos;
+} */
+
+export default async function Recommandations(number){
+    var recos = [];
+    var url_recos = [];
+    for (var i = 0; i < number; i = i + 1)
+    {
+        recos.push(await RecoAleatoire());
+    } 
+    for (const reco of recos){
+        url_recos.push(await requestMaker(reco.index, reco.nom));
+    }
+    return url_recos;
+}
+
 
     
 
 function RecoGenre(like, niveau){
     /* donne une reco en fonction de si on aime ou non le genre et de si on l'aime beaucoup 
     ou juste un peu */
-    if (like == true){
+    if (like === true){
 
     }
     else{
@@ -75,8 +89,8 @@ function RecoArtiste(niveau) {
 
 async function RecoAleatoire(){
     /* donne une reco aléatoire de genre*/
-    const cheminFichier = path.join(process.cwd(), 'listeGenresItunes.csv');
-    const data = await fs.readFile(cheminFichier, 'utf-8');
+    const response = await fetch('/listeGenresItunes.csv');
+    const data = await response.text();
     const lignes = data.split('\n').filter(ligne => ligne.trim() !== "");
 
     const poidsSpeciaux = {
@@ -113,17 +127,49 @@ async function RecoAleatoire(){
 }}
     
 
-const reco = await RecoAleatoire();
-console.log("Résultat final :", reco.nom, reco.index);
 
-function RequestMaker(){
-    /* je renvoie le nom de l'artiste ou le nom du genre */
+async function requestMaker(id = "", name = "") {
+  // Default query when on ne sait pas quoi chercher
+  const defaultTerm = "pop";
+  const defaultGenreId = "14";
+
+  // term: on privilégie le nom fourni, sinon on retient "pop"
+  let term = defaultTerm;
+  if (name && name.trim().length > 0) {
+    term = name.trim();
+  }
+
+  // genreId: par défaut 14 (pop). Si l'id correspond à un genre existant, on l'utilise.
+  let genreId = defaultGenreId;
+  genreId = id;
+  /*
+  if (id && typeof listeGenres !== 'undefined' && listeGenres.has(id)) {
+    genreId = id;
+  }*/
+
+  term = name;
+  // Si l'id correspond à un artiste, on peut utiliser spécialement son nom
+  /*
+  if (id && typeof listeArtistes !== 'undefined' && listeArtistes.has(id)) {
+    const artiste = listeArtistes.get(id);
+    if (artiste?.nom) {
+      term = artiste.nom;
+    }
+  }*/
+
+  const url = new URL("https://itunes.apple.com/search");
+  url.searchParams.set("term", term);
+  url.searchParams.set("entity", "song");
+  url.searchParams.set("limit", "50");
+  url.searchParams.set("genreId", genreId);
+
+  return url.toString();
 }
 
 function RetourUtilisateur(like, artist, genre){
     /* modifie les objets mapArtistes et mapGenres pour changer le score du genre et celui de 
     l'artiste en fonction de si l'utilisateur a liké ou pas */
-    if (like == true){
+    if (like === true){
         /* on met +1 pour l'artiste et le genre */
     }
     else{

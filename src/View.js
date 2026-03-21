@@ -1,10 +1,23 @@
 
 import './View.css';
 import React, { useState, useEffect } from 'react';
+import Recommandations from './Recos';
 
 function View() {
   const [count, setCount] = useState(0);
   const [screen, setScreen] = useState('discover');
+  const [url, setUrl] = useState(null);
+
+  useEffect(() => {
+    async function chargerRecos() {
+      const urls = await Recommandations(3);
+      setUrl(urls[0]); // On prend la première URL
+    }
+    chargerRecos();
+  }, []);
+
+  if (!url) return <div>Chargement...</div>;
+
   function handleCount(){
     setCount(count + 1);
   }
@@ -24,6 +37,7 @@ function View() {
             count={count} 
             handleCount={handleCount}
             onFinish={onFinish}
+            url = {url}
           />
         )}
 
@@ -38,17 +52,18 @@ function View() {
   );
 }
 
-function PagePrincipale({count, handleCount, onFinish}){
+function PagePrincipale({count, handleCount, onFinish, url}){
   const [track, setTrack] = useState(null);
   const [audio] = useState(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
 
   async function GetSong(){
     try {
-      const response = await fetch('https://itunes.apple.com/search?term=pop&genreId=14&limit=50&entity=song');
+      console.log(url);
+      const response = await fetch(url);
       const data = await response.json();
-      if (data.results && data.results[39]) {
-        const morceau = data.results[39];
+      if (data.results && data.results[20]) {
+        const morceau = data.results[20];
         setTrack(morceau);
         audio.src = morceau.previewUrl;
         audio.play().catch(e => console.log("Audio en attente..."));
