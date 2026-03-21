@@ -26,16 +26,20 @@ interface Genre {
  * 
  * @param genresCsv le fichier qui contient la liste des genres de musique
  */
-export function uploadGenres(genresCsv: string){
-  const rows = genresCsv.trim().split("\n");
+export async function uploadGenres(genresCsv: File){
+  const content = await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error("Failed to read file"));
+    reader.readAsText(genresCsv);
+  });
+
+  const rows = content.trim().split(/\r?\n/);
   let i =1;
   for(; i < rows.length; i++){
     const [path, nom, code] = rows[i].split(",");
     listeGenres.set(code.trim(), {nom: nom.trim(),score: 0});
   };
-  listeGenres.forEach((genre)=>{
-    console.log(genre);
-  });
 }
 
 /**
@@ -60,8 +64,7 @@ export function updateGenreScore(genreId : string, value : number){
   }
   let nouveauScore = genre.score;
   nouveauScore += value<0? -1:1;
-  genre.score = nouveauScore;
-  listeGenres.set(genreId, genre);
+  listeGenres.set(genreId, {nom : genre.nom, score : nouveauScore});
 }
 
 /**

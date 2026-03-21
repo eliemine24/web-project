@@ -1,7 +1,7 @@
 
 import './View.css';
 import React, { useState, useEffect } from 'react';
-import uploadGenres from './Model.ts';
+
 
 function View() {
   const [count, setCount] = useState(0);
