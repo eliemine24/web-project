@@ -94,7 +94,7 @@ async function RecoAleatoire(){
     const lignes = data.split('\n').filter(ligne => ligne.trim() !== "");
 
     const poidsSpeciaux = {
-        "Pop": 50,    // 10 fois plus de chances
+        "Pop": 50,    
         "Rock": 40,
         "Heavy Metal": 10,
         "Alternative": 20,
