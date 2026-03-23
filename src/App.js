@@ -7,6 +7,6 @@ Main = back-end controller
 import View from './View.js';
 
 
-
-/* affiche la page */
-export default View; 
+export default function App() {
+  return <View />;
+}

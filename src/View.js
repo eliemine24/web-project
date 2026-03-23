@@ -1,35 +1,78 @@
 
 import './View.css';
 import React, { useState, useEffect } from 'react';
+import Recommandations from './Recos';
 
 function View() {
-  const [count, setCount] = useState(0);
-  const [screen, setScreen] = useState('discover');
-  function handleCount(){
-    setCount(count + 1);
+  const [screen, setScreen] = useState('init');
+  const [likes, setLikes] = useState(0);
+  const [urlsPool, setUrlsPool] = useState([]); // Stocke les 7 URLs
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  async function chargerNouveauPaquet() {
+    const nouvellesUrls = await Recommandations(7);
+    setUrlsPool(nouvellesUrls);
+    setCurrentIndex(0); // On repart au début du nouveau paquet
   }
+
+  useEffect(() => {
+    chargerNouveauPaquet();
+  }, []);
+
+  const currentUrl = urlsPool[currentIndex];
+
+  function passerALaSuivante(estUnLike) {
+    if (estUnLike) {
+      setLikes(likes + 1);
+    }
+
+    if (currentIndex < 6) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      chargerNouveauPaquet();
+    }
+  }
+
+  if (!currentUrl) return <div>Chargement du nouveau mix...</div>;
+
+
   function onFinish(){
     setScreen('playlist');
   }
+
+  function onStart(){
+    setScreen('discover');
+  }
+
   function onRestart(){
-    setCount(0);
+    setLikes(0);
+    setCurrentIndex(0);
     setScreen("discover");
+    chargerNouveauPaquet();
   }
 
   return (
     <div className="App">
       <header className="App-header">
+
+        {screen === 'init' && (
+          <PageInitiale
+            onStart={onStart}
+          />
+        )}
+
         {screen === 'discover' && (
           <PagePrincipale 
-            count={count} 
-            handleCount={handleCount}
-            onFinish={onFinish}
+            count={likes} 
+            handleAction={(like) => passerALaSuivante(like)}
+            onFinish={() => setScreen('playlist')}
+            url={currentUrl}
           />
         )}
 
         {screen === 'playlist' && (
           <PageResultat
-            count={count}
+            count={likes}
             onRestart={onRestart}
           />
         )}
@@ -38,25 +81,41 @@ function View() {
   );
 }
 
-function PagePrincipale({count, handleCount, onFinish}){
+function PageInitiale({onStart}){
+  return(
+    <div className="Container">
+    <ButtonStart onClick={onStart}/>
+    </div>
+    )
+
+}
+
+function PagePrincipale({count, handleAction, onFinish, url}){
   const [track, setTrack] = useState(null);
   const [audio] = useState(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
 
   async function GetSong(){
     try {
-      const response = await fetch('https://itunes.apple.com/search?term=pop&genreId=14&limit=50&entity=song');
+      console.log(url);
+      const response = await fetch(url);
       const data = await response.json();
-      console.log(data);
-      if (data.results && data.results[39]) {
-        const morceau = data.results[39];
+      const entier = Math.floor(Math.random() * (20 + 1));
+      if (data.results && data.results[entier]) {
+        const morceau = data.results[entier];
         setTrack(morceau);
+        audio.pause();
         audio.src = morceau.previewUrl;
+        audio.load();
         audio.play().catch(e => console.log("Audio en attente..."));
         setIsPlaying(true);}}
     catch(error){
       console.error("Erreur lors du fetch :", error);}
   }
+
+  useEffect(() => {
+      GetSong();
+  }, [url]);
 
 
   return(
@@ -64,19 +123,22 @@ function PagePrincipale({count, handleCount, onFinish}){
       <div className="Compteur">{count} titres</div>
       <h1>discover</h1>
       <div className="Music-Card">
-        {!isPlaying ? (<ButtonStart onClick={GetSong}/>):(<>
+        {track && (
+        <>
         <img 
           src={track.artworkUrl100.replace('100x100', '400x400')} 
           alt="cover" 
           style={{ borderRadius: '15px', width: '100%' }} 
         />
+
         <div className="Music-Info">
           <h2>{track.trackName}</h2>
           <p>{track.artistName}</p>
-        </div></>)}
+        </div>
+        </>)}
       </div>
-      <MyButton couleur="#ff4458" symbole="❤︎" bottom="17%" right="8%" onClick={handleCount}/>  
-      <MyButton couleur="#24292e" symbole="✗" bottom="17%" left="8%"/> 
+      <MyButton couleur="#ff4458" symbole="❤︎" bottom="14%" right="8%" onClick={() => handleAction(true)}/>  
+      <MyButton couleur="#24292e" symbole="✗" bottom="14%" left="8%" onClick={() => handleAction(false)}/> 
       {count > 0 && (<ButtonTerm onClick={onFinish}/>)}
     </div>
     )
