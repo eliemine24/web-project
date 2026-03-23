@@ -1,6 +1,7 @@
 
 import './View.css';
 import React, { useState, useEffect } from 'react';
+import ListMusic from './ListMusic';
 
 function View() {
   const [count, setCount] = useState(0);
@@ -130,12 +131,13 @@ function PageResultat({ count, onRestart, getParam }) {
       <MyButton couleur="#24292e" symbole="▶" bottom="40%" right="8%"/>  
       <MyButton couleur="#24292e" symbole="⏸" bottom="40%" left="8%"/> 
       <div className="Playlist-Scroll">
-        something
-
+        <ListMusic/>
       </div>
     </div>
     )
 }
+
+
 
 
 function MyButton({couleur, symbole, bottom, right, left, onClick}) {
@@ -154,6 +156,8 @@ function MyButton({couleur, symbole, bottom, right, left, onClick}) {
     </button>
   );
 }
+
+
 
 function ButtonTerm({onClick}){
   return(

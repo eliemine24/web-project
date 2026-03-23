@@ -79,6 +79,21 @@
   margin-top: 16%; 
 }
 
+.Bouton-Musique{
+  width: 250px;
+  height: 60px;
+  background-color: #1db954; /* Vert Spotify-ish */
+  border: none;
+  border-radius: 30px;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden; /* Important pour masquer le texte qui sort */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .Music-Info h2 { margin: 0; font-size: 1.2rem; }
 .Music-Info p { color: #666; margin : 0; font-size: 1.1rem;}
 
