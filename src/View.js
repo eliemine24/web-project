@@ -27,8 +27,6 @@ function View() {
       setLikes(likes + 1);
       addMusic(track.trackId, {nom : track.trackName,
                                nomArtiste : track.artistName});
-      console.log(playlist);
-        
     }
 
     if (currentIndex < 6) {
@@ -102,7 +100,6 @@ function PagePrincipale({count, handleAction, onFinish, url}){
 
   async function GetSong(){
     try {
-      console.log(url);
       const response = await fetch(url);
       const data = await response.json();
       const entier = Math.floor(Math.random() * (20 + 1));
