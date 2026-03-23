@@ -139,8 +139,8 @@ function PagePrincipale({count, handleAction, onFinish, url}){
         </div>
         </>)}
       </div>
-      <MyButton couleur="#ff4458" symbole="❤︎" bottom="14%" right="8%" onClick={() => handleAction(true, track)}/>  
-      <MyButton couleur="#24292e" symbole="✗" bottom="14%" left="8%" onClick={() => handleAction(false)}/> 
+      <MyButton couleur="#ff4458" symbole="❤︎" bottom="13%" right="8%" onClick={() => handleAction(true, track)}/>  
+      <MyButton couleur="#24292e" symbole="✗" bottom="13%" left="8%" onClick={() => handleAction(false)}/> 
       {count > 0 && (<ButtonTerm onClick={onFinish}/>)}
     </div>
     )

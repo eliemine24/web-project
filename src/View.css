@@ -80,11 +80,11 @@
 }
 
 .Music-Info {
-  width: 100%;       /* Prend toute la largeur interne de la carte */
-  overflow: hidden;  /* 👈 CRUCIAL : C'est ici qu'on coupe ce qui dépasse */
+  width: 100%;       
+  overflow: hidden;  
   white-space: nowrap; 
   position: relative;
-  margin-top: 10px;  /* Espace sous l'image */
+  margin-top: 5px;  /* Espace sous l'image */
 }
 
 .Music-Info h2 { 
@@ -92,10 +92,15 @@
   white-space: nowrap; /* Empêche le texte d'aller à la ligne */
   margin: 0; 
   font-size: 1.4rem; 
-  display: inline-block;
-  animation: defilement-spotify 20s linear infinite;}
+  transition: transform 0.5s ease;
+  display: inline-block;}
 
-.Music-Info p { color: #666; margin : 0; font-size: 1.1rem;}
+.Music-Info:hover h2 {
+  animation: defilement-spotify 15s linear infinite;
+}
+
+.Music-Info p { color: #666; margin : 0; font-size: 1.1rem; white-space: normal; 
+  word-wrap: break-word;}
 
 @keyframes defilement-spotify {
   0% {
