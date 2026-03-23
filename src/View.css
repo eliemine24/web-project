@@ -79,23 +79,32 @@
   margin-top: 16%; 
 }
 
-.Bouton-Musique{
-  width: 250px;
-  height: 60px;
-  background-color: #1db954; /* Vert Spotify-ish */
-  border: none;
-  border-radius: 30px;
-  color: white;
-  cursor: pointer;
+.Music-Info {
+  width: 100%;       /* Prend toute la largeur interne de la carte */
+  overflow: hidden;  /* 👈 CRUCIAL : C'est ici qu'on coupe ce qui dépasse */
+  white-space: nowrap; 
   position: relative;
-  overflow: hidden; /* Important pour masquer le texte qui sort */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-top: 10px;  /* Espace sous l'image */
 }
 
-.Music-Info h2 { margin: 0; font-size: 1.2rem; }
+.Music-Info h2 { 
+  overflow: hidden; /* Cache le texte qui sort du cadre */
+  white-space: nowrap; /* Empêche le texte d'aller à la ligne */
+  margin: 0; 
+  font-size: 1.4rem; 
+  display: inline-block;
+  animation: defilement-spotify 20s linear infinite;}
+
 .Music-Info p { color: #666; margin : 0; font-size: 1.1rem;}
+
+@keyframes defilement-spotify {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-100%, 0);
+  }
+}
 
 .Bouton-Terminer {
   position: absolute;
@@ -147,9 +156,3 @@
   transform: translateX(-50%) scale(1.1);
 }
 
-.Playlist-Scroll {
-  width: 300px;
-  height: 100px;
-  overflow-y: scroll;
-  scrollbar-width: thin;
-}
