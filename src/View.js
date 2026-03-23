@@ -58,6 +58,7 @@ function View() {
     setScreen("parameter")
   }
 
+
   return (
     <div className="App">
       <header className="App-header">
@@ -157,19 +158,25 @@ function PageResultat({ count, onRestart, getParam }) {
   const [audio] = useState(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
 
-  async function GetSong(){
+async function GetSong(){
     try {
-      const response = await fetch('https://itunes.apple.com/search?term=pop&genreId=14&limit=50&entity=song');
+      const url = 'https://itunes.apple.com/search?term=pop&genreId=14&limit=50&entity=song';
+      const response = await fetch(url);
       const data = await response.json();
-      console.log(data);
-      if (data.results && data.results[39]) {
-        const morceau = data.results[39];
+      const entier = Math.floor(Math.random() * (20 + 1));
+      if (data.results && data.results[entier]) {
+        const morceau = data.results[entier];
         setTrack(morceau);
+        audio.pause();
         audio.src = morceau.previewUrl;
+        audio.load();
         audio.play().catch(e => console.log("Audio en attente..."));
         setIsPlaying(true);}}
     catch(error){
       console.error("Erreur lors du fetch :", error);}
+  }
+  
+  function playMusicId(musicId){
   }
 
 
@@ -177,10 +184,11 @@ function PageResultat({ count, onRestart, getParam }) {
     <div className="Container">
       <div className="Compteur">{count} titres</div>
       <h1>playlist</h1>
-      {count > 0 && (<ButtonParam onClick={getParam}/>)}
-      {count > 0 && (<ButtonBack onClick={onRestart}/>)}
+      {count > 0 && (<MyButton couleur="#24292e" symbole="⚙️" bottom="90%" right="5%" onClick={getParam}/>)}
+      {count > 0 && (<MyButton couleur="#24292e" symbole="⟳" bottom="90%" left="5%" onClick={onRestart}/>)}
       <div className="Music-Card">
-        {!isPlaying ? (<ButtonStart onClick={GetSong}/>):(<>
+        {track && (
+        <>
         <img 
           src={track.artworkUrl100.replace('100x100', '400x400')} 
           alt="cover" 
@@ -191,10 +199,10 @@ function PageResultat({ count, onRestart, getParam }) {
           <p>{track.artistName}</p>
         </div></>)}
       </div>
-      <MyButton couleur="#24292e" symbole="▶" bottom="40%" right="8%"/>  
-      <MyButton couleur="#24292e" symbole="⏸" bottom="40%" left="8%"/> 
+      <MyButton couleur="#24292e" symbole="⏭" bottom="62%" right="12%"/>  
+      <MyButton couleur="#24292e" symbole="⏸" bottom="62%" left="12%"/> 
       <div className="Playlist-Scroll">
-        <ListMusic/>
+        <ListMusic onClick = {playMusicId()}/>
       </div>
     </div>
     )
@@ -237,28 +245,6 @@ function ButtonStart({onClick}){
       onClick={onClick}
     >
       START!
-    </button>)
-}
-
-function ButtonParam({onClick}){
-  return(
-    <button 
-      className="Bouton-Param"
-      style={{bottom: '50%', left: '10%'}} 
-      onClick={onClick}
-    >
-      PARAM
-    </button>)
-}
-
-function ButtonBack({onClick}){
-  return(
-    <button 
-      className="Bouton-Back"
-      style={{top: '3%', right: '10%'}} 
-      onClick={onClick}
-    >
-      REDO !
     </button>)
 }
 

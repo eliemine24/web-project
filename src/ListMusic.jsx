@@ -1,19 +1,19 @@
 import {playlist} from './Model.tsx';
 import './View.css';
 
-function ListMusic() {
+function ListMusic(onClick) {
   return (
     playlist.forEach((musique) => {
-      <ButtonMusic nom = {musique.nom} artiste={musique.nomArtiste} idMusic=""/>
+      <ButtonMusic nom = {musique.nom} artiste={musique.nomArtiste} idMusic={musique.key} onClick = {onClick}/>
       })
   )
 }
 
-function ButtonMusic({nom, artiste, infoMusic, onClick}){
+function ButtonMusic({nom, artiste, idMusic, onClick}){
   return(
     <button
       className="Bouton-Musique"
-      onClick={onClick}
+      onClick={onClick(idMusic)}
       >
         <b>{nom}</b>, {artiste}
       </button>
