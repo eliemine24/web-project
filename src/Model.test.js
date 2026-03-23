@@ -16,9 +16,9 @@ describe('uploadGenres with African Music data', () => {
 
     await uploadGenres(file);
 
-    expect(listeGenres.has("AFRICAN-DANCEHALL-00")).toBe(true);
-    expect(listeGenres.get("AFRICAN-DANCEHALL-00").nom).toBe("African Dancehall");
-    expect(listeGenres.get("AFRICAN-DANCEHALL-00").score).toBe(0);
+    expect(listeGenres.has("45")).toBe(true);
+    expect(listeGenres.get("45").nom).toBe("African Dancehall");
+    expect(listeGenres.get("45").score).toBe(0);
   });
 });
 
@@ -36,9 +36,9 @@ describe('update the score of a genre', () => {
 
       await uploadGenres(file);
       const initialScore = 0;
-      updateGenreScore("INDIAN-FOLK-00", 42);
+      updateGenreScore("1279", 42);
 
-      expect(listeGenres.get("INDIAN-FOLK-00").score).toBe(initialScore + 1);
+      expect(listeGenres.get("1279").score).toBe(initialScore + 1);
     });
 });
 

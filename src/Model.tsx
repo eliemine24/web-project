@@ -37,8 +37,8 @@ export async function uploadGenres(genresCsv: File){
   const rows = content.trim().split(/\r?\n/);
   let i =1;
   for(; i < rows.length; i++){
-    const [path, nom, code] = rows[i].split(",");
-    listeGenres.set(code.trim(), {nom: nom.trim(),score: 0});
+    const [path, nom, code, id] = rows[i].split(",");
+    listeGenres.set(id.trim(), {nom: nom.trim(),score: 0});
   };
 }
 
