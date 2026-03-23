@@ -22,6 +22,10 @@ interface Musique {
   nomArtiste : string
 }
 
+interface Track {
+  id : string
+}
+
 /**
  * 
  * @param genresCsv le fichier qui contient la liste des genres de musique
@@ -128,3 +132,4 @@ export function getGenreIdByName(name: string): string | undefined {
 export const listeArtistes = new Map<string, Artiste>();
 export const listeGenres = new Map<string, Genre>();
 export const playlist = new Map<string, Musique>();
+export const joue = new Map<string, Track>();

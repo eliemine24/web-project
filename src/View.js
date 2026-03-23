@@ -3,7 +3,7 @@ import './View.css';
 import React, { useState, useEffect } from 'react';
 import Recommandations from './Recos.js';
 import {RetourUtilisateur} from './Recos.js';
-import { addMusic, getGenreIdByName } from './Model.tsx';
+import { addMusic, getGenreIdByName, joue } from './Model.tsx';
 import { uploadGenres } from './Model.tsx';
 
 function View() {
@@ -29,6 +29,7 @@ function View() {
 
   function passerALaSuivante(estUnLike, track) {
     if (!track) return;
+    joue.set(track.trackId.toString(), { id: track.trackId.toString() });
     setTrack(null);
     const genreId = getGenreIdByName(track.primaryGenreName);
     if (estUnLike) {
@@ -116,15 +117,20 @@ function PagePrincipale({count, handleAction, onFinish, url, track, setTrack}){
     try {
       const response = await fetch(url);
       const data = await response.json();
-      const entier = Math.floor(Math.random() * (20 + 1));
-      if (data.results && data.results[entier]) {
-        const morceau = data.results[entier];
-        if (track && morceau.trackId === track.trackId) {
-          // Si c'est le même morceau, on en prend un autre (index + 1)
-          setTrack(data.results[(entier + 1) % data.results.length]);
-      } else {
-          setTrack(morceau);
+      if (data.results && data.results.length > 0) {
+      let compteur = 0;
+      let morceau = data.results[compteur];
+
+      // On cherche dans les résultats un morceau qui n'a pas encore été "joué"
+      while (compteur < data.results.length && joue.has(data.results[compteur].trackId.toString())) {
+        compteur++;
       }
+
+      // Si on a épuisé les 50 résultats sans en trouver un nouveau, on prend le 1er par défaut
+      morceau = data.results[compteur] || data.results[0];
+        setTrack(morceau);
+        compteur = 1; 
+      
         audio.pause();
         audio.src = morceau.previewUrl;
         audio.load();
