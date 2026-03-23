@@ -2,6 +2,7 @@
 import './View.css';
 import React, { useState, useEffect } from 'react';
 import Recommandations from './Recos';
+import { addMusic, playlist } from './Model.tsx';
 
 function View() {
   const [screen, setScreen] = useState('init');
@@ -21,9 +22,13 @@ function View() {
 
   const currentUrl = urlsPool[currentIndex];
 
-  function passerALaSuivante(estUnLike) {
+  function passerALaSuivante(estUnLike, track) {
     if (estUnLike) {
       setLikes(likes + 1);
+      addMusic(track.trackId, {nom : track.trackName,
+                               nomArtiste : track.artistName});
+      console.log(playlist);
+        
     }
 
     if (currentIndex < 6) {
@@ -64,7 +69,7 @@ function View() {
         {screen === 'discover' && (
           <PagePrincipale 
             count={likes} 
-            handleAction={(like) => passerALaSuivante(like)}
+            handleAction={(like, track) => passerALaSuivante(like, track)}
             onFinish={() => setScreen('playlist')}
             url={currentUrl}
           />
@@ -137,7 +142,7 @@ function PagePrincipale({count, handleAction, onFinish, url}){
         </div>
         </>)}
       </div>
-      <MyButton couleur="#ff4458" symbole="❤︎" bottom="14%" right="8%" onClick={() => handleAction(true)}/>  
+      <MyButton couleur="#ff4458" symbole="❤︎" bottom="14%" right="8%" onClick={() => handleAction(true, track)}/>  
       <MyButton couleur="#24292e" symbole="✗" bottom="14%" left="8%" onClick={() => handleAction(false)}/> 
       {count > 0 && (<ButtonTerm onClick={onFinish}/>)}
     </div>

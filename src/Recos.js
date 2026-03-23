@@ -4,7 +4,7 @@ Algo de recommandation
 
 */
 
-import mapArtistes from "./Model.js";
+import {listeArtistes} from "./Model.tsx";
 
 //import { listeArtistes, listeGenres } from "./Model.js";
 
@@ -64,7 +64,7 @@ function RecoGenre(like, niveau){
 
 function RecoArtiste(niveau) {
     // On transforme la Map en tableau et on filtre direct les scores < 0
-    const artistesValides = Array.from(mapArtistes.entries())
+    const artistesValides = Array.from(listeArtistes.entries())
                                  .filter(([nom, score]) => score >= 0);
     // Sécurité : si aucun artiste n'a un score >= 0
     if (artistesValides.length === 0) return null;
