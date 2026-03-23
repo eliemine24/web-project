@@ -1,11 +1,3 @@
-/*
-Registers objects structures for 
-
-- artists listes
-- genres listes 
-- etc
-*/
-
 /**
  * 
  */
@@ -20,6 +12,14 @@ interface Artiste {
 interface Genre {
   nom: string;
   score : number;
+}
+
+/**
+ * 
+ */
+interface Musique {
+  nom : string,
+  nomArtiste : string
 }
 
 /**
@@ -49,6 +49,15 @@ export async function uploadGenres(genresCsv: File){
  */
 export function addArtist(id : string, artiste : Artiste){
   listeArtistes.set(id, {nom : artiste.nom,score : artiste.score});
+}
+
+/**
+ * 
+ * @param id 
+ * @param musique 
+ */
+export function addMusic(id : string, musique : Musique){
+  playlist.set(id, {nom : musique.nom, nomArtiste : musique.nomArtiste});
 }
 
 /**
@@ -85,6 +94,6 @@ export function updateArtistScore(artisteId : string, value : number, nomArtiste
   listeArtistes.set(artisteId, artiste);
 }
 
-
 export const listeArtistes = new Map<string, Artiste>();
 export const listeGenres = new Map<string, Genre>();
+export const playlist = new Map<string, Musique>();

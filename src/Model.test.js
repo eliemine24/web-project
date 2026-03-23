@@ -1,4 +1,4 @@
-import { uploadGenres, listeGenres, updateGenreScore, addArtist, listeArtistes, updateArtistScore } from './Model';
+import { uploadGenres, listeGenres, updateGenreScore, addArtist, listeArtistes, updateArtistScore, playlist, addMusic } from './Model';
 import fs from "fs";
 import path from "path";
 
@@ -75,10 +75,23 @@ describe('attempt to update an artist score for a non-existent artist and add th
     listeArtistes.clear();
   });
 
-  it('should add an artist to the database that wasn\' previously there', async() =>{
+  it('should add an artist to the database that wasn\'t previously there', async() =>{
     updateArtistScore("87", 45, "John");
     expect(listeArtistes.has("87")).toBe(true);
     expect(listeArtistes.get("87").nom).toBe("John");
     expect(listeArtistes.get("87").score).toBe(1);
+  });
+});
+
+describe('add music to the playlist', ()=> {
+  beforeEach(() => {
+    playlist.clear();
+  });
+
+  it('should add a song and its artist to the playlist', async() =>{
+    addMusic("98", {nom: "Viva la Vida", nomArtiste : "Coldplay"});
+    expect(playlist.has("98")).toBe(true);
+    expect(playlist.get("98").nom).toBe("Viva la Vida");
+    expect(playlist.get("98").nomArtiste).toBe("Coldplay");
   });
 });
