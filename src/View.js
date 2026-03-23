@@ -1,82 +1,42 @@
 
 import './View.css';
 import React, { useState, useEffect } from 'react';
-import Recommandations from './Recos';
-import { addMusic, playlist } from './Model.tsx';
+import ListMusic from './ListMusic';
 
 function View() {
-  const [screen, setScreen] = useState('init');
-  const [likes, setLikes] = useState(0);
-  const [urlsPool, setUrlsPool] = useState([]); // Stocke les 7 URLs
-  const [currentIndex, setCurrentIndex] = useState(0)
-
-  async function chargerNouveauPaquet() {
-    const nouvellesUrls = await Recommandations(7);
-    setUrlsPool(nouvellesUrls);
-    setCurrentIndex(0); // On repart au début du nouveau paquet
+  const [count, setCount] = useState(0);
+  const [screen, setScreen] = useState('discover');
+  function handleCount(){
+    setCount(count + 1);
   }
-
-  useEffect(() => {
-    chargerNouveauPaquet();
-  }, []);
-
-  const currentUrl = urlsPool[currentIndex];
-
-  function passerALaSuivante(estUnLike, track) {
-    if (estUnLike) {
-      setLikes(likes + 1);
-      addMusic(track.trackId, {nom : track.trackName,
-                               nomArtiste : track.artistName});
-    }
-
-    if (currentIndex < 6) {
-      setCurrentIndex(currentIndex + 1);
-    } else {
-      chargerNouveauPaquet();
-    }
-  }
-
-  if (!currentUrl) return <div>Chargement du nouveau mix...</div>;
-
-
   function onFinish(){
     setScreen('playlist');
   }
-
-  function onStart(){
-    setScreen('discover');
-  }
-
   function onRestart(){
-    setLikes(0);
-    setCurrentIndex(0);
+    setCount(0);
     setScreen("discover");
-    chargerNouveauPaquet();
   }
+  function getParam(){
+    setScreen("parameter")
+  }
+
 
   return (
     <div className="App">
       <header className="App-header">
-
-        {screen === 'init' && (
-          <PageInitiale
-            onStart={onStart}
-          />
-        )}
-
         {screen === 'discover' && (
           <PagePrincipale 
-            count={likes} 
-            handleAction={(like, track) => passerALaSuivante(like, track)}
-            onFinish={() => setScreen('playlist')}
-            url={currentUrl}
+            count={count} 
+            handleCount={handleCount}
+            onFinish={onFinish}
           />
         )}
 
         {screen === 'playlist' && (
           <PageResultat
-            count={likes}
+            count={count}
             onRestart={onRestart}
+            getParam={getParam}
           />
         )}
       </header>
@@ -84,40 +44,25 @@ function View() {
   );
 }
 
-function PageInitiale({onStart}){
-  return(
-    <div className="Container">
-    <ButtonStart onClick={onStart}/>
-    </div>
-    )
-
-}
-
-function PagePrincipale({count, handleAction, onFinish, url}){
+function PagePrincipale({count, handleCount, onFinish}){
   const [track, setTrack] = useState(null);
   const [audio] = useState(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
 
   async function GetSong(){
     try {
-      const response = await fetch(url);
+      const response = await fetch('https://itunes.apple.com/search?term=pop&genreId=14&limit=50&entity=song');
       const data = await response.json();
-      const entier = Math.floor(Math.random() * (20 + 1));
-      if (data.results && data.results[entier]) {
-        const morceau = data.results[entier];
+      console.log(data);
+      if (data.results && data.results[39]) {
+        const morceau = data.results[39];
         setTrack(morceau);
-        audio.pause();
         audio.src = morceau.previewUrl;
-        audio.load();
         audio.play().catch(e => console.log("Audio en attente..."));
         setIsPlaying(true);}}
     catch(error){
       console.error("Erreur lors du fetch :", error);}
   }
-
-  useEffect(() => {
-      GetSong();
-  }, [url]);
 
 
   return(
@@ -125,33 +70,74 @@ function PagePrincipale({count, handleAction, onFinish, url}){
       <div className="Compteur">{count} titres</div>
       <h1>discover</h1>
       <div className="Music-Card">
-        {track && (
-        <>
+        {!isPlaying ? (<ButtonStart onClick={GetSong}/>):(<>
         <img 
           src={track.artworkUrl100.replace('100x100', '400x400')} 
           alt="cover" 
           style={{ borderRadius: '15px', width: '100%' }} 
         />
-
         <div className="Music-Info">
           <h2>{track.trackName}</h2>
           <p>{track.artistName}</p>
-        </div>
-        </>)}
+        </div></>)}
       </div>
-      <MyButton couleur="#ff4458" symbole="❤︎" bottom="14%" right="8%" onClick={() => handleAction(true, track)}/>  
-      <MyButton couleur="#24292e" symbole="✗" bottom="14%" left="8%" onClick={() => handleAction(false)}/> 
+      <MyButton couleur="#ff4458" symbole="❤︎" bottom="17%" right="8%" onClick={handleCount}/>  
+      <MyButton couleur="#24292e" symbole="✗" bottom="17%" left="8%"/> 
       {count > 0 && (<ButtonTerm onClick={onFinish}/>)}
     </div>
     )
 
 }
 
-function PageResultat({ count, onRestart }) {
+function PageResultat({ count, onRestart, getParam }) {
+  const [track, setTrack] = useState(null);
+  const [audio] = useState(new Audio());
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  async function GetSong(){
+    try {
+      const response = await fetch('https://itunes.apple.com/search?term=pop&genreId=14&limit=50&entity=song');
+      const data = await response.json();
+      console.log(data);
+      if (data.results && data.results[39]) {
+        const morceau = data.results[39];
+        setTrack(morceau);
+        audio.src = morceau.previewUrl;
+        audio.play().catch(e => console.log("Audio en attente..."));
+        setIsPlaying(true);}}
+    catch(error){
+      console.error("Erreur lors du fetch :", error);}
+  }
+
+
   return(
-  <div className='Container'>
-  </div>)
+    <div className="Container">
+      <div className="Compteur">{count} titres</div>
+      <h1>playlist</h1>
+      {count > 0 && (<ButtonParam onClick={getParam}/>)}
+      {count > 0 && (<ButtonBack onClick={onRestart}/>)}
+      <div className="Music-Card">
+        {!isPlaying ? (<ButtonStart onClick={GetSong}/>):(<>
+        <img 
+          src={track.artworkUrl100.replace('100x100', '400x400')} 
+          alt="cover" 
+          style={{ borderRadius: '15px', width: '100%' }} 
+        />
+        <div className="Music-Info">
+          <h2>{track.trackName}</h2>
+          <p>{track.artistName}</p>
+        </div></>)}
+      </div>
+      <MyButton couleur="#24292e" symbole="▶" bottom="40%" right="8%"/>  
+      <MyButton couleur="#24292e" symbole="⏸" bottom="40%" left="8%"/> 
+      <div className="Playlist-Scroll">
+        <ListMusic/>
+      </div>
+    </div>
+    )
 }
+
+
 
 
 function MyButton({couleur, symbole, bottom, right, left, onClick}) {
@@ -170,6 +156,8 @@ function MyButton({couleur, symbole, bottom, right, left, onClick}) {
     </button>
   );
 }
+
+
 
 function ButtonTerm({onClick}){
   return(
@@ -192,4 +180,27 @@ function ButtonStart({onClick}){
       START!
     </button>)
 }
+
+function ButtonParam({onClick}){
+  return(
+    <button 
+      className="Bouton-Param"
+      style={{bottom: '50%', left: '10%'}} 
+      onClick={onClick}
+    >
+      PARAM
+    </button>)
+}
+
+function ButtonBack({onClick}){
+  return(
+    <button 
+      className="Bouton-Back"
+      style={{top: '3%', right: '10%'}} 
+      onClick={onClick}
+    >
+      REDO !
+    </button>)
+}
+
 export default View;
