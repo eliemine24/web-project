@@ -172,13 +172,13 @@ function PageResultat({ count, onRestart, getParam }) {
       console.error("Erreur lors du fetch :", error);}
   }
 
-
   return(
     <div className="Container">
       <div className="Compteur">{count} titres</div>
       <h1>playlist</h1>
       {count > 0 && (<ButtonParam onClick={getParam}/>)}
       {count > 0 && (<ButtonBack onClick={onRestart}/>)}
+
       <div className="Music-Card">
         {!isPlaying ? (<ButtonStart onClick={GetSong}/>):(<>
         <img 
@@ -191,6 +191,7 @@ function PageResultat({ count, onRestart, getParam }) {
           <p>{track.artistName}</p>
         </div></>)}
       </div>
+      
       <MyButton couleur="#24292e" symbole="▶" bottom="40%" right="8%"/>  
       <MyButton couleur="#24292e" symbole="⏸" bottom="40%" left="8%"/> 
       <div className="Playlist-Scroll">
