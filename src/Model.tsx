@@ -26,20 +26,29 @@ interface Musique {
  * 
  * @param genresCsv le fichier qui contient la liste des genres de musique
  */
-export async function uploadGenres(genresCsv: File){
-  const content = await new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = () => reject(new Error("Failed to read file"));
-    reader.readAsText(genresCsv);
-  });
+export async function uploadGenres(){
+  try {
+    const response = await fetch('/listeGenresItunes.csv');
+    const content = await response.text();
 
-  const rows = content.trim().split(/\r?\n/);
-  let i =1;
-  for(; i < rows.length; i++){
-    const [path, nom, code, id] = rows[i].split(",");
-    listeGenres.set(id.trim(), {nom: nom.trim(),score: 0});
-  };
+    const rows = content.trim().split(/\r?\n/);
+    
+    // On commence à 1 pour sauter l'en-tête du CSV
+    for (let i = 1; i < rows.length; i++) {
+      const columns = rows[i].split(",");
+      if (columns.length >= 4) {
+        const [path, nom, code, id] = columns;
+        // On remplit la Map globale
+        listeGenres.set(id.trim(), { 
+          nom: nom.trim(), 
+          score: 0 
+        });
+      }
+    }
+    console.log(`${listeGenres.size} genres chargés depuis le CSV.`);
+  } catch (error) {
+    console.error("Erreur lors du chargement du CSV :", error);
+  }
 }
 
 /**
@@ -49,6 +58,10 @@ export async function uploadGenres(genresCsv: File){
  */
 export function addArtist(id : string, artiste : Artiste){
   listeArtistes.set(id, {nom : artiste.nom,score : artiste.score});
+}
+
+export function addgenre(id : string, genre : Genre){
+  listeGenres.set(id, {nom : genre.nom, score : genre.score});
 }
 
 /**
@@ -65,15 +78,24 @@ export function addMusic(id : string, musique : Musique){
  * @param genreId un identifiant pour le genre
  * @param value, si la valeur est négative, le score diminue par 1, sinon il augmente par 1
  */
-export function updateGenreScore(genreId : string, value : number){
-  const genre = listeGenres.get(genreId);
-  if(!genre){
-    console.log(`genre avec id "${genreId}" n'existe pas`);
+export function updateGenreScore(genreId : string, value : number, fallbackName: string = "Inconnu"){
+  console.log(listeGenres);
+  const increment = value < 0 ? -1 : 1;
+
+  const id = genreId || fallbackName;
+  const genre = listeGenres.get(id);
+
+  if (!genre) {
+    listeGenres.set(genreId, { nom: fallbackName, score: increment });
     return;
   }
-  let nouveauScore = genre.score;
-  nouveauScore += value<0? -1:1;
-  listeGenres.set(genreId, {nom : genre.nom, score : nouveauScore});
+
+  const nouveauScore = genre.score + increment;
+  
+  listeGenres.set(genreId, { 
+    nom: genre.nom, 
+    score: nouveauScore 
+  });
 }
 
 /**
@@ -92,6 +114,15 @@ export function updateArtistScore(artisteId : string, value : number, nomArtiste
   nouveauScore += value<0? -1:1;
   artiste.score = nouveauScore;
   listeArtistes.set(artisteId, artiste);
+}
+
+export function getGenreIdByName(name: string): string | undefined {
+  for (const [id, data] of listeGenres.entries()) {
+    if (data.nom.toLowerCase() === name.toLowerCase()) {
+      return id;
+    }
+  }
+  return undefined;
 }
 
 export const listeArtistes = new Map<string, Artiste>();

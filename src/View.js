@@ -1,38 +1,51 @@
 
 import './View.css';
 import React, { useState, useEffect } from 'react';
-import Recommandations from './Recos';
-import { addMusic, playlist } from './Model.tsx';
+import Recommandations from './Recos.js';
+import {RetourUtilisateur} from './Recos.js';
+import { addMusic, getGenreIdByName } from './Model.tsx';
+import { uploadGenres } from './Model.tsx';
 
 function View() {
   const [screen, setScreen] = useState('init');
   const [likes, setLikes] = useState(0);
   const [urlsPool, setUrlsPool] = useState([]); // Stocke les 7 URLs
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [paquetIndex, setPaquetIndex] = useState(1);
+  const [track, setTrack] = useState(null);
 
-  async function chargerNouveauPaquet() {
-    const nouvellesUrls = await Recommandations(7);
+  async function chargerNouveauPaquet(a) {
+    const nouvellesUrls = await Recommandations(a);
     setUrlsPool(nouvellesUrls);
     setCurrentIndex(0); // On repart au début du nouveau paquet
   }
 
   useEffect(() => {
-    chargerNouveauPaquet();
+    uploadGenres();
+    chargerNouveauPaquet(0);
   }, []);
 
   const currentUrl = urlsPool[currentIndex];
 
   function passerALaSuivante(estUnLike, track) {
+    if (!track) return;
+    setTrack(null);
+    const genreId = getGenreIdByName(track.primaryGenreName);
     if (estUnLike) {
       setLikes(likes + 1);
       addMusic(track.trackId, {nom : track.trackName,
                                nomArtiste : track.artistName});
+      RetourUtilisateur(true, track.artistName, track.artistId, genreId)
     }
-
+    if(!estUnLike){
+      RetourUtilisateur(false, track.artistName, track.artistId, genreId)
+    }
     if (currentIndex < 6) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      chargerNouveauPaquet();
+      chargerNouveauPaquet(paquetIndex);
+      setPaquetIndex(prev => prev + 1);
+
     }
   }
 
@@ -70,6 +83,8 @@ function View() {
             handleAction={(like, track) => passerALaSuivante(like, track)}
             onFinish={() => setScreen('playlist')}
             url={currentUrl}
+            track={track}        
+            setTrack={setTrack}
           />
         )}
 
@@ -93,8 +108,7 @@ function PageInitiale({onStart}){
 
 }
 
-function PagePrincipale({count, handleAction, onFinish, url}){
-  const [track, setTrack] = useState(null);
+function PagePrincipale({count, handleAction, onFinish, url, track, setTrack}){
   const [audio] = useState(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -105,7 +119,12 @@ function PagePrincipale({count, handleAction, onFinish, url}){
       const entier = Math.floor(Math.random() * (20 + 1));
       if (data.results && data.results[entier]) {
         const morceau = data.results[entier];
-        setTrack(morceau);
+        if (track && morceau.trackId === track.trackId) {
+          // Si c'est le même morceau, on en prend un autre (index + 1)
+          setTrack(data.results[(entier + 1) % data.results.length]);
+      } else {
+          setTrack(morceau);
+      }
         audio.pause();
         audio.src = morceau.previewUrl;
         audio.load();
@@ -139,8 +158,8 @@ function PagePrincipale({count, handleAction, onFinish, url}){
         </div>
         </>)}
       </div>
-      <MyButton couleur="#ff4458" symbole="❤︎" bottom="13%" right="8%" onClick={() => handleAction(true, track)}/>  
-      <MyButton couleur="#24292e" symbole="✗" bottom="13%" left="8%" onClick={() => handleAction(false)}/> 
+      <MyButton couleur="#ff4458" symbole="❤︎" bottom="13%" right="8%" onClick={() => track && handleAction(true, track)}/>  
+      <MyButton couleur="#24292e" symbole="✗" bottom="13%" left="8%" onClick={() => track && handleAction(false, track)}/> 
       {count > 0 && (<ButtonTerm onClick={onFinish}/>)}
     </div>
     )
