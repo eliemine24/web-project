@@ -156,3 +156,24 @@
   transform: translateX(-50%) scale(1.1);
 }
 
+.Bouton-Musique{
+  width: 250px;
+  height: 60px;
+  background-color: #1db954; /* Vert Spotify-ish */
+  border: none;
+  border-radius: 30px;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden; /* Important pour masquer le texte qui sort */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Playlist-Scroll {
+  width: 300px;
+  height: 100px;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+}

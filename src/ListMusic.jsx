@@ -2,10 +2,10 @@ import {playlist} from './Model.tsx';
 import './View.css';
 
 function ListMusic() {
-    return (
-  playlist.forEach((musique) => {
-    <ButtonMusic nom = {musique.nom} artiste={musique.nomArtiste} idMusic=""/>
-        })
+  return (
+    playlist.forEach((musique) => {
+      <ButtonMusic nom = {musique.nom} artiste={musique.nomArtiste} idMusic=""/>
+      })
   )
 }
 
