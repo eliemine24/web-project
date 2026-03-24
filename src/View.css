@@ -175,10 +175,10 @@
   max-height: 220px;    
   overflow-y: auto;
   margin-top: 15px;
-  margin-bottom: 30px;  /* 👈 Espace vide en bas du cadre blanc */
+  margin-bottom: 7%;  /* 👈 Espace vide en bas du cadre blanc */
   border-radius: 0;
   background: #eeeeee; 
-  padding: 5px;         /* 👈 Padding réduit */
+  padding: 5px;        
   border: none;
 }
 

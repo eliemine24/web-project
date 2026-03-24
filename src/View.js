@@ -145,8 +145,8 @@ function PagePrincipale({count, handleAction, onFinish, url}){
         </div>
         </>)}
       </div>
-      <MyButton couleur="#ff4458" symbole="❤︎" bottom="13%" right="8%" onClick={() => handleAction(true, track)}/>  
-      <MyButton couleur="#24292e" symbole="✗" bottom="13%" left="8%" onClick={() => handleAction(false)}/> 
+      <MyButton couleur="#ff4458" symbole="❤︎" top="75%" right="8%" onClick={() => handleAction(true, track)}/>  
+      <MyButton couleur="#24292e" symbole="✗" top="75%" left="8%" onClick={() => handleAction(false)}/> 
       {count > 0 && (<ButtonTerm onClick={onFinish}/>)}
     </div>
     )
@@ -181,10 +181,9 @@ async function GetSong(){
 
   return(
     <div className="Container">
-      <div className="Compteur">{count} titres</div>
       <h1>playlist</h1>
-      {count > 0 && (<MyButton couleur="#24292e" symbole="⚙️" bottom="90%" right="5%" onClick={getParam}/>)}
-      {count > 0 && (<MyButton couleur="#24292e" symbole="⟳" bottom="90%" left="5%" onClick={onRestart}/>)}
+      {count > 0 && (<MyButton couleur="#24292e" symbole="⚙️" top = "8%"  right="5%" onClick={getParam}/>)}
+      {count > 0 && (<MyButton couleur="#24292e" symbole="⟳" top = "8%" left="5%" onClick={onRestart}/>)}
       <div className="Music-Card">
         {track && (
         <>
@@ -198,8 +197,8 @@ async function GetSong(){
           <p>{track.artistName}</p>
         </div></>)}
       </div>
-      <MyButton couleur="#24292e" symbole="⏭" bottom="62%" right="12%"/>  
-      <MyButton couleur="#24292e" symbole="⏸" bottom="62%" left="12%"/> 
+      <MyButton couleur="#24292e" symbole="⏭" top= "34%" right="12%"/>  
+      <MyButton couleur="#24292e" symbole="⏸" top="34%" left="12%"/> 
       <div className="Playlist-Scroll">
         <ListMusic onClick = {playMusicId()}/>
       </div>
@@ -208,14 +207,14 @@ async function GetSong(){
 }
 
 
-function MyButton({couleur, symbole, bottom, right, left, onClick}) {
+function MyButton({couleur, symbole, top, right, left, onClick}) {
   return (
     <button 
       className="Mon-bouton" 
       onClick={onClick}
       style={{ 
-        backgroundColor: couleur,  
-        bottom: bottom, 
+        backgroundColor: couleur,
+        top : top,  
         right: right,
         left: left 
       }}
