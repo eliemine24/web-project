@@ -118,19 +118,15 @@ function PagePrincipale({count, handleAction, onFinish, url, track, setTrack}){
       const response = await fetch(url);
       const data = await response.json();
       if (data.results && data.results.length > 0) {
-      let compteur = 0;
-      let morceau = data.results[compteur];
+        const resultatsMelanges = data.results.sort(() => Math.random() - 0.5);
+        // Trouver le premier qui n'a pas été joué
+        let morceau = resultatsMelanges.find(m => !joue.has(m.trackId.toString()));
+        // Si tout a été joué, on prend le premier du mélange (le hasard parmi les déjà joués)
+        if (!morceau) {
+          morceau = resultatsMelanges[0];
+        }
 
-      // On cherche dans les résultats un morceau qui n'a pas encore été "joué"
-      while (compteur < data.results.length && joue.has(data.results[compteur].trackId.toString())) {
-        compteur++;
-      }
-
-      // Si on a épuisé les 50 résultats sans en trouver un nouveau, on prend le 1er par défaut
-      morceau = data.results[compteur] || data.results[0];
         setTrack(morceau);
-        compteur = 1; 
-      
         audio.pause();
         audio.src = morceau.previewUrl;
         audio.load();
