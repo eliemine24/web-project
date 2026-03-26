@@ -1,38 +1,52 @@
 
 import './View.css';
 import React, { useState, useEffect } from 'react';
-import Recommandations from './Recos';
-import { addMusic, playlist } from './Model.tsx';
+import Recommandations from './Recos.js';
+import {RetourUtilisateur} from './Recos.js';
+import { addMusic, getGenreIdByName, joue } from './Model.tsx';
+import { uploadGenres } from './Model.tsx';
 
 function View() {
   const [screen, setScreen] = useState('init');
   const [likes, setLikes] = useState(0);
   const [urlsPool, setUrlsPool] = useState([]); // Stocke les 7 URLs
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [paquetIndex, setPaquetIndex] = useState(1);
+  const [track, setTrack] = useState(null);
 
-  async function chargerNouveauPaquet() {
-    const nouvellesUrls = await Recommandations(7);
+  async function chargerNouveauPaquet(a) {
+    const nouvellesUrls = await Recommandations(a);
     setUrlsPool(nouvellesUrls);
     setCurrentIndex(0); // On repart au début du nouveau paquet
   }
 
   useEffect(() => {
-    chargerNouveauPaquet();
+    uploadGenres();
+    chargerNouveauPaquet(0);
   }, []);
 
   const currentUrl = urlsPool[currentIndex];
 
   function passerALaSuivante(estUnLike, track) {
+    if (!track) return;
+    joue.set(track.trackId.toString(), { id: track.trackId.toString() });
+    setTrack(null);
+    const genreId = getGenreIdByName(track.primaryGenreName);
     if (estUnLike) {
       setLikes(likes + 1);
       addMusic(track.trackId, {nom : track.trackName,
                                nomArtiste : track.artistName});
+      RetourUtilisateur(true, track.artistName, track.artistId, genreId)
     }
-
+    if(!estUnLike){
+      RetourUtilisateur(false, track.artistName, track.artistId, genreId)
+    }
     if (currentIndex < 6) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      chargerNouveauPaquet();
+      chargerNouveauPaquet(paquetIndex);
+      setPaquetIndex(prev => prev + 1);
+
     }
   }
 
@@ -70,6 +84,8 @@ function View() {
             handleAction={(like, track) => passerALaSuivante(like, track)}
             onFinish={() => setScreen('playlist')}
             url={currentUrl}
+            track={track}        
+            setTrack={setTrack}
           />
         )}
 
@@ -93,8 +109,7 @@ function PageInitiale({onStart}){
 
 }
 
-function PagePrincipale({count, handleAction, onFinish, url}){
-  const [track, setTrack] = useState(null);
+function PagePrincipale({count, handleAction, onFinish, url, track, setTrack}){
   const [audio] = useState(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -102,10 +117,20 @@ function PagePrincipale({count, handleAction, onFinish, url}){
     try {
       const response = await fetch(url);
       const data = await response.json();
-      const entier = Math.floor(Math.random() * (20 + 1));
-      if (data.results && data.results[entier]) {
-        const morceau = data.results[entier];
+      if (data.results && data.results.length > 0) {
+      let compteur = 0;
+      let morceau = data.results[compteur];
+
+      // On cherche dans les résultats un morceau qui n'a pas encore été "joué"
+      while (compteur < data.results.length && joue.has(data.results[compteur].trackId.toString())) {
+        compteur++;
+      }
+
+      // Si on a épuisé les 50 résultats sans en trouver un nouveau, on prend le 1er par défaut
+      morceau = data.results[compteur] || data.results[0];
         setTrack(morceau);
+        compteur = 1; 
+      
         audio.pause();
         audio.src = morceau.previewUrl;
         audio.load();
@@ -136,11 +161,12 @@ function PagePrincipale({count, handleAction, onFinish, url}){
         <div className="Music-Info">
           <h2>{track.trackName}</h2>
           <p>{track.artistName}</p>
+          <p class="genre">{track.primaryGenreName}</p>
         </div>
         </>)}
       </div>
-      <MyButton couleur="#ff4458" symbole="❤︎" bottom="13%" right="8%" onClick={() => handleAction(true, track)}/>  
-      <MyButton couleur="#24292e" symbole="✗" bottom="13%" left="8%" onClick={() => handleAction(false)}/> 
+      <MyButton couleur="#ff4458" symbole="❤︎" bottom="13%" right="8%" onClick={() => track && handleAction(true, track)}/>  
+      <MyButton couleur="#24292e" symbole="✗" bottom="13%" left="8%" onClick={() => track && handleAction(false, track)}/> 
       {count > 0 && (<ButtonTerm onClick={onFinish}/>)}
     </div>
     )
