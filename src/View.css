@@ -100,6 +100,14 @@
 }
 
 .Music-Info p { color: #666; margin : 0; font-size: 1.1rem; white-space: normal; 
+  word-wrap: break-word;
+  display: 
+  -webkit-box;
+  -webkit-line-clamp: 1; /* Limite à une seule ligne */
+  -webkit-box-orient: vertical;  
+  overflow: hidden;}
+
+.Music-Info p.genre { color: #666; margin : 0; font-size: 0.9rem; white-space: normal; 
   word-wrap: break-word;}
 
 @keyframes defilement-spotify {
@@ -258,3 +266,4 @@
   font-size: 0.75rem;   /* 👈 Réduit (était à 0.8) */
   color: #777;
 }
+

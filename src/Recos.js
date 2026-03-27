@@ -4,37 +4,50 @@ Algo de recommandation
 
 */
 
-import {listeArtistes} from "./Model.tsx";
+import {listeArtistes, listeGenres, updateArtistScore, updateGenreScore} from "./Model.tsx";
 
-//import { listeArtistes, listeGenres } from "./Model.js";
 
-/*export default function Recommandations(number){
+export default async function Recommandations(number){
     /* demande 7 nouvelles reco via les autres fonctions*/
     /* une fois les reco obtenues, applique le request maker dessus pour avoir les liens*/ 
-    /*var recos = [];
+    var recos = [];
     var url_recos = [];
-    if (number%2 == 0){
-        recos.push(RecoGenre(true, "haut"));
-        recos.push(RecoArtiste("faible"));
+
+    if (number === 0){
+        for (var i = 0; i < 9; i = i + 1)
+        {
+        recos.push(await RecoAleatoire());
+        } 
+        for (const reco of recos){
+            url_recos.push(await requestMaker(reco.index, reco.nom));
+        }
+    return url_recos;
+
+    }
+    if (number%2 === 0){
+        recos.push(await RecoGenre(true, "haut"));
+        recos.push(await RecoArtiste("faible"));
     }
     else {
-         recos.push(RecoGenre(true, "faible"));
-         recos.push(RecoArtiste("haut"));
+         recos.push(await RecoGenre(true, "faible"));
+         recos.push(await RecoArtiste("haut"));
 
     }
-    recos.push(RecoGenre(true, "normal")); 
-    recos.push(RecoGenre(false));
-    recos.push(RecoArtiste("normal"))
+    recos.push(await RecoGenre(true, "normal")); 
+    recos.push(await RecoGenre(false));
+    recos.push(await RecoArtiste("normal"))
     for (var i = 0; i < 2; i = i + 1)
     {
-        recos.push(RecoAleatoire());
+        recos.push(await RecoAleatoire());
     } 
     for (const reco of recos){
-        url_recos.push(RequestMaker(reco));
+        url_recos.push(await requestMaker(reco.index, reco.nom));
     }
+    console.log(url_recos);
     return url_recos;
-} */
+} 
 
+/*
 export default async function Recommandations(number){
     var recos = [];
     var url_recos = [];
@@ -46,45 +59,73 @@ export default async function Recommandations(number){
         url_recos.push(await requestMaker(reco.index, reco.nom));
     }
     return url_recos;
-}
+}*/
 
 
     
 
-function RecoGenre(like, niveau){
-    /* donne une reco en fonction de si on aime ou non le genre et de si on l'aime beaucoup 
-    ou juste un peu */
-    if (like === true){
+async function RecoGenre(like, niveau) {
+    const tousLesGenres = Array.from(listeGenres.entries());
+    
+    if (tousLesGenres.length === 0) return await RecoAleatoire();
 
-    }
-    else{
+    let selection = [];
 
+    if (like === true) {
+        const genresPositifs = tousLesGenres.filter(([id, data]) => data.score > 0);
+        
+        if (genresPositifs.length === 0) {selection = tousLesGenres};
+
+        if (niveau === "haut") {
+            const maxScore = Math.max(...genresPositifs.map(([id, data]) => data.score));
+            selection = genresPositifs.filter(([id, data]) => data.score === maxScore);
+        } 
+        else if (niveau === "faible") {
+            const minScorePositif = Math.min(...genresPositifs.map(([id, data]) => data.score));
+            selection = genresPositifs.filter(([id, data]) => data.score === minScorePositif);
+        } 
+        else {
+            selection = genresPositifs;
+        }
+    } 
+    else {
+        selection = tousLesGenres.filter(([id, data]) => data.score <= 0);
     }
+
+    if (selection.length === 0) selection = tousLesGenres;
+
+    const randomIdx = Math.floor(Math.random() * selection.length);
+    const [selectedId, selectedData] = selection[randomIdx];
+
+    return {
+        nom: selectedData.nom,
+        index: selectedId
+    };
 }
 
-function RecoArtiste(niveau) {
-    // On transforme la Map en tableau et on filtre direct les scores < 0
+async function RecoArtiste(niveau) {
     const artistesValides = Array.from(listeArtistes.entries())
-                                 .filter(([nom, score]) => score >= 0);
-    // Sécurité : si aucun artiste n'a un score >= 0
-    if (artistesValides.length === 0) return null;
+                                 .filter(([id, data]) => data.score >= 0);
+
+    if (artistesValides.length === 0) {return await RecoAleatoire()};
     let selection = [];
     if (niveau === "haut") {
-        // On cherche le score maximum parmi les valides
-        const maxScore = Math.max(...artistesValides.map(a => a[1]));
-        // On garde tous ceux qui ont ce score max (au cas où il y ait des ex-aequo)
-        selection = artistesValides.filter(a => a[1] === maxScore);
+        const maxScore = Math.max(...artistesValides.map(([id, data]) => data.score));
+        selection = artistesValides.filter(([id, data]) => data.score === maxScore);
     } else if (niveau === "faible") {
-        // On cherche le score minimum (mais >= 0)
-        const minScore = Math.min(...artistesValides.map(a => a[1]));
-        selection = artistesValides.filter(a => a[1] === minScore);
+        const minScore = Math.min(...artistesValides.map(([id, data]) => data.score));
+        selection = artistesValides.filter(([id, data]) => data.score === minScore);
     } else {
         selection = artistesValides;
     }
-    // On pioche au hasard dans la sélection finale
-    const indexAleatoire = Math.floor(Math.random() * selection.length);
-    // selection[index] est un tableau [nom, score], on retourne le nom (index 0)
-    return selection[indexAleatoire][0];}
+    if (selection.length === 0) return await RecoAleatoire();
+
+    const randomIdx = Math.floor(Math.random() * selection.length);
+    const [selectedId, selectedData] = selection[randomIdx];
+    console.log(selectedId, selectedData);
+
+    return { nom: selectedData.nom, index : selectedId }; 
+}
 
 
 async function RecoAleatoire(){
@@ -166,14 +207,18 @@ async function requestMaker(id = "", name = "") {
   return url.toString();
 }
 
-function RetourUtilisateur(like, artist, genre){
+export function RetourUtilisateur(like, nomArtiste, artistId, genreId){
     /* modifie les objets mapArtistes et mapGenres pour changer le score du genre et celui de 
     l'artiste en fonction de si l'utilisateur a liké ou pas */
     if (like === true){
         /* on met +1 pour l'artiste et le genre */
+        updateGenreScore(genreId, 1);
+        updateArtistScore(artistId, 1, nomArtiste);
     }
     else{
         /* on met -1 pour l'artiste et le genre */
+        updateGenreScore(genreId, -1);
+        updateArtistScore(artistId, -1, nomArtiste);
     }
 
 }
