@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MyButton } from './MyButton.jsx';
 import { ListMusic } from './ListMusic.jsx';
 
@@ -8,12 +8,11 @@ export function PageResultat({ count, onRestart, getParam }) {
   const [audio] = useState(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
 
-async function GetSong(){
+async function GetSong(url){
     try {
-      const url = 'https://itunes.apple.com/search?term=pop&genreId=14&limit=50&entity=song';
       const response = await fetch(url);
       const data = await response.json();
-      const entier = Math.floor(Math.random() * (20 + 1));
+      const entier = Math.floor(1);
       if (data.results && data.results[entier]) {
         const morceau = data.results[entier];
         setTrack(morceau);
@@ -24,9 +23,6 @@ async function GetSong(){
         setIsPlaying(true);}}
     catch(error){
       console.error("Erreur lors du fetch :", error);}
-  }
-  
-  function playMusicId(musicId){
   }
   
   return(
@@ -50,7 +46,7 @@ async function GetSong(){
       <MyButton couleur="#24292e" symbole="⏭" top= "34%" right="12%"/>  
       <MyButton couleur="#24292e" symbole="⏸" top="34%" left="12%"/> 
       <div className="Playlist-Scroll">
-        <ListMusic onClick = {playMusicId()}/>
+        <ListMusic playMusique = {GetSong}/>
       </div>
     </div>
     )

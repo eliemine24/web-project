@@ -28,7 +28,7 @@ function View() {
 
   const currentUrl = urlsPool[currentIndex];
 
-  function passerALaSuivante(estUnLike, track) {
+  function passerALaSuivante(estUnLike, track, url) {
     if (!track) return;
     joue.set(track.trackId.toString(), { id: track.trackId.toString() });
     setTrack(null);
@@ -36,7 +36,8 @@ function View() {
     if (estUnLike) {
       setLikes(likes + 1);
       addMusic(track.trackId, {nom : track.trackName,
-                               nomArtiste : track.artistName});
+                               nomArtiste : track.artistName, 
+                               url : url});
       RetourUtilisateur(true, track.artistName, track.artistId, genreId)
     }
     if(!estUnLike){
@@ -55,6 +56,7 @@ function View() {
 
 
   function onFinish(){
+    setTrack(null);
     setScreen('playlist');
   }
 
@@ -86,7 +88,7 @@ function View() {
         {screen === 'discover' && (
           <PagePrincipale 
             count={likes} 
-            handleAction={(like, track) => passerALaSuivante(like, track)}
+            handleAction={(like, track) => passerALaSuivante(like, track, currentUrl)}
             onFinish={() => setScreen('playlist')}
             url={currentUrl}
             track={track}        

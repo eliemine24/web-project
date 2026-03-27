@@ -185,9 +185,9 @@
 
 .Playlist-Scroll {
   width: 80%;
-  max-height: 35%;    
+  max-height: 30%;    
   overflow-y: auto;
-  margin-top: 10%;  /* 👈 Espace vide en bas du cadre blanc */
+  margin-top: 20%;  /* 👈 Espace vide en bas du cadre blanc */
   margin-bottom : 5%;
   border-radius: 0;
   background: #eeeeee; 
