@@ -11,7 +11,6 @@ export function ListMusic({playMusique}) {
           index={index + 1} // Pour afficher 1, 2, 3...
           nom={musique.nom} 
           artiste={musique.nomArtiste} 
-          url={musique.url}
           playMusique = {playMusique}
         />
       ))}
@@ -19,9 +18,9 @@ export function ListMusic({playMusique}) {
   );
 }
 
-function TrackRow({ index, nom, artiste, url, playMusique }) {
+function TrackRow({ index, nom, artiste, playMusique }) {
   return (
-    <div className="Track-Row" onClick={() => playMusique(url)}>
+    <div className="Track-Row" onClick={() => playMusique(index-1)}>
 
       <span className="Track-Number">{index}</span>
       

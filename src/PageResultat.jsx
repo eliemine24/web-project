@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { MyButton } from './MyButton.jsx';
 import { ListMusic } from './ListMusic.jsx';
+import { playlist } from './Model.tsx';
 
 
 export function PageResultat({ count, onRestart, getParam }) {
   const [track, setTrack] = useState(null);
   const [audio] = useState(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(null);
+  const musiquesArray = Array.from(playlist.values());
 
 async function GetSong(selectedTrack){
     if (!selectedTrack || !selectedTrack.previewUrl) {
@@ -28,11 +31,41 @@ async function GetSong(selectedTrack){
     }
   }
 
+function playAtIndex(index) {
+    if (index >= 0 && index < musiquesArray.length) {
+      const selectedTrack = musiquesArray[index];
+      setCurrentIndex(index);
+      
+      setTrack(selectedTrack.url);
+      audio.src = selectedTrack.url.previewUrl; 
+      audio.load();
+      audio.play().catch(e => console.warn("Lecture bloquée par le navigateur", e));
+    }
+  }
+
+  // Gestion de la fin du morceau (Auto-play next)
+  useEffect(() => {
+    const handleEnded = () => {
+      const nextIndex = currentIndex + 1;
+      if (nextIndex < musiquesArray.length) {
+        playAtIndex(nextIndex); // Joue la suivante
+      } else {
+        console.log("Fin de la playlist");
+      }
+    };
+
+    audio.addEventListener('ended', handleEnded);
+    
+    // Nettoyage pour éviter les fuites de mémoire
+    return () => {
+      audio.removeEventListener('ended', handleEnded);
+    };
+  }, [currentIndex]); // Se réactive quand l'index change
+
+
 function pauseMusique(){
     audio.pause();
   }
-
-  
   
   return(
     <div className="Container">
@@ -52,10 +85,10 @@ function pauseMusique(){
           <p>{track.artistName}</p>
         </div></>)}
       </div>
-      <MyButton couleur="#24292e" symbole="⏭" top= "34%" right="12%"/>  
+      <MyButton couleur="#24292e" symbole="⏭" top= "34%" right="12%" onClick={() => playAtIndex(currentIndex + 1)}/>  
       <MyButton couleur="#24292e" symbole="⏸" top="34%" left="12%" onClick={pauseMusique}/> 
       <div className="Playlist-Scroll">
-        <ListMusic playMusique = {GetSong}/>
+        <ListMusic playMusique = {playAtIndex}/>
       </div>
     </div>
     )
