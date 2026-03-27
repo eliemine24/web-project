@@ -112,7 +112,7 @@ function PageInitiale({onStart}){
 
 }
 
-function PagePrincipale({count, handleAction, onFinish, url, track, setTrack}){
+function PagePrincipale({count, handleAction, onFinish, url}){
   const [track, setTrack] = useState(null);
   const [audio] = useState(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);

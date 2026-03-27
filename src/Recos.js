@@ -7,7 +7,7 @@ Algo de recommandation
 import {listeArtistes, listeGenres, updateArtistScore, updateGenreScore} from "./Model.tsx";
 
 
-export default async function Recommandations(number){
+export async function Recommandations(number){
     /* demande 7 nouvelles reco via les autres fonctions*/
     /* une fois les reco obtenues, applique le request maker dessus pour avoir les liens*/ 
     var recos = [];
