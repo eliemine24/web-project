@@ -11,25 +11,6 @@ export function PageResultat({ count, onRestart, getParam }) {
   const [currentIndex, setCurrentIndex] = useState(null);
   const musiquesArray = Array.from(playlist.values());
 
-async function GetSong(selectedTrack){
-    if (!selectedTrack || !selectedTrack.previewUrl) {
-      console.warn('Track invalide ou sans previewUrl', selectedTrack);
-      return;
-    }
-
-    setTrack(selectedTrack);
-    audio.pause();
-    audio.src = selectedTrack.previewUrl;
-    audio.load();
-
-    try {
-      await audio.play();
-      setIsPlaying(true);
-    } catch (error) {
-      console.warn('Audio en attente...', error);
-      setIsPlaying(false);
-    }
-  }
 
 function playAtIndex(index) {
     if (index >= 0 && index < musiquesArray.length) {
