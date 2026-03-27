@@ -1,7 +1,7 @@
 import {playlist} from './Model.tsx';
 import './View.css';
 
-function ListMusic() {
+export function ListMusic() {
   const musiquesArray = Array.from(playlist.values());
   return (
     <div className="Playlist-Tracklist">
@@ -31,6 +31,3 @@ function TrackRow({ index, nom, artiste, onClick }) {
     </div>
   );
 }
-
-
-export default ListMusic;
