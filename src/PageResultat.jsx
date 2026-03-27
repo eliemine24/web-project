@@ -8,21 +8,24 @@ export function PageResultat({ count, onRestart, getParam }) {
   const [audio] = useState(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
 
-async function GetSong(url){
+async function GetSong(selectedTrack){
+    if (!selectedTrack || !selectedTrack.previewUrl) {
+      console.warn('Track invalide ou sans previewUrl', selectedTrack);
+      return;
+    }
+
+    setTrack(selectedTrack);
+    audio.pause();
+    audio.src = selectedTrack.previewUrl;
+    audio.load();
+
     try {
-      const response = await fetch(url);
-      const data = await response.json();
-      const entier = Math.floor(0);
-      if (data.results && data.results[entier]) {
-        const morceau = data.results[entier];
-        setTrack(morceau);
-        audio.pause();
-        audio.src = morceau.previewUrl;
-        audio.load();
-        audio.play().catch(e => console.log("Audio en attente..."));
-        setIsPlaying(true);}}
-    catch(error){
-      console.error("Erreur lors du fetch :", error);}
+      await audio.play();
+      setIsPlaying(true);
+    } catch (error) {
+      console.warn('Audio en attente...', error);
+      setIsPlaying(false);
+    }
   }
   
   return(

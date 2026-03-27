@@ -37,7 +37,7 @@ function View() {
       setLikes(likes + 1);
       addMusic(track.trackId, {nom : track.trackName,
                                nomArtiste : track.artistName, 
-                               url : track.previewUrl});
+                               url : track});
       RetourUtilisateur(true, track.artistName, track.artistId, genreId)
     }
     if(!estUnLike){
@@ -56,7 +56,6 @@ function View() {
 
 
   function onFinish(){
-    setTrack(null);
     setScreen('playlist');
   }
 
@@ -100,6 +99,7 @@ function View() {
           <PageResultat
             count={likes}
             onRestart={onRestart}
+            getParam={getParam}
           />
         )}
       </header>

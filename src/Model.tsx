@@ -20,7 +20,7 @@ interface Genre {
 interface Musique {
   nom : string,
   nomArtiste : string,
-  url : string
+  url : any
 }
 
 interface Track {
