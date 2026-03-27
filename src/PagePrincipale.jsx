@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { MyButton } from './MyButton.jsx';
-import { joue } from './Model.tsx';
+import { joue, playlist } from './Model.tsx';
 
 export function PagePrincipale({count, handleAction, onFinish, url}){
   const [track, setTrack] = useState(null);
@@ -37,7 +37,7 @@ export function PagePrincipale({count, handleAction, onFinish, url}){
 
   return(
     <div className="Container">
-      <div className="Compteur">{count} titres</div>
+      <div className="Compteur">{playlist.size} titres</div>
       <h1>discover</h1>
       <div className="Music-Card">
         {track && (
