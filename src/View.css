@@ -169,3 +169,101 @@
   transform: translateX(-50%) scale(1.1);
 }
 
+.Bouton-Musique{
+  height: 30px;
+  background-color: #a9afce; 
+  border: none;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.Playlist-Scroll {
+  width: 80%;
+  max-height: 35%;    
+  overflow-y: auto;
+  margin-top: 10%;  /* 👈 Espace vide en bas du cadre blanc */
+  margin-bottom : 5%;
+  border-radius: 0;
+  background: #eeeeee; 
+  padding: 5px;        
+  border: none;
+}
+
+/* --- Conteneur Tracklist (Inchangé mais nettoyé) --- */
+.Playlist-Tracklist {
+  width: 100%; /* Prend toute la largeur de Playlist-Scroll */
+  margin: 0 auto;
+  padding: 0;
+}
+
+.Track-Info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  text-align: left;      /* 👈 Aligne le texte à gauche */
+  align-items: flex-start; /* 👈 Aligne les spans à gauche si nécessaire */
+}
+
+/* --- Une Rangée de Track (Totalement Modifiée pour le style épuré) --- */
+.Track-Row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 4px 8px;     /* 👈 Très compact verticalement */
+  border-radius: 0;
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+  color: black; 
+  border-bottom: 1px solid #e5e5e5; 
+}
+
+/* Effet de survol sur la bande (on change la couleur des textes enfants) */
+.Track-Row:hover {
+  background-color: rgba(0, 0, 0, 0.08); /* Gris un peu plus prononcé */
+}
+
+/* Le numéro devient plus blanc */
+.Track-Row:hover .Track-Number {
+  color: #666; 
+}
+
+/* Le titre devient noir pur (ou blanc si ton fond était sombre) */
+.Track-Row:hover .Track-Title {
+  color: #000;
+}
+
+/* L'artiste s'éclaircit aussi */
+.Track-Row:hover .Track-Artist {
+  color: #444;
+}
+
+.Track-Number {
+  width: 20px;          /* 👈 Plus étroit */
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.8rem;   /* 👈 Plus petit */
+  color: #999; 
+  text-align: left;
+  margin-right: 10px;
+}
+
+.Track-Title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;   /* 👈 Réduit (était à 0.95) */
+  font-weight: 600; 
+  color: #24292e;
+  margin-bottom: 0;     /* 👈 Supprime l'espace sous le titre */
+  line-height: 1.2;
+  }
+
+.Track-Artist {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.75rem;   /* 👈 Réduit (était à 0.8) */
+  color: #777;
+}
+
