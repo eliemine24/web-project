@@ -24,7 +24,7 @@ function playAtIndex(index) {
     }
   }
 
-  // Gestion de la fin du morceau (Auto-play next)
+  // Passe au morceau suivant automatiquement
   useEffect(() => {
     const handleEnded = () => {
       const nextIndex = currentIndex + 1;
@@ -33,13 +33,6 @@ function playAtIndex(index) {
       } else {
         console.log("Fin de la playlist");
       }
-    };
-
-    audio.addEventListener('ended', handleEnded);
-    
-    // Nettoyage pour éviter les fuites de mémoire
-    return () => {
-      audio.removeEventListener('ended', handleEnded);
     };
   }, [currentIndex]); // Se réactive quand l'index change
 
