@@ -1,4 +1,3 @@
-
 import './View.css';
 import { useState, useEffect } from 'react';
 import {RetourUtilisateur, Recommandations} from './Recos.js';
