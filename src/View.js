@@ -102,6 +102,9 @@ function PageInitiale({onStart}){
           <div class="horizontal-scroll-item item-4"></div>
           <div class="horizontal-scroll-item item-5"></div>		
         </div>
+        <div class="Title">
+          Munder
+        </div>
         <div>
           <ButtonStart onClick={onStart}/>
         </div>

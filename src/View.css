@@ -132,11 +132,11 @@
 
 .Bouton-Start{
   position: absolute;
-  top :45%;
+  top :53%;
   left :50%;
   transform: translateX(-50%); /*on centre*/
-  width: 50%; 
-  height: 10%; 
+  width: 30%; 
+  height: 7%; 
   border-radius: 15px; 
   background-color: black; 
   color: white; 
@@ -154,6 +154,16 @@
 .Bouton-Start:hover {
   filter: brightness(0.95) saturate(95%);
   transform: translateX(-50%) scale(1.1);
+}
+
+.Title{
+  position: absolute;
+  top : 35%;
+  height : 20%;
+  color :#492f72;
+  font-family: 'Brush Script MT';
+  font-size: 6rem;
+  font-weight: bold;
 }
 
 .horizontal-scroll {
