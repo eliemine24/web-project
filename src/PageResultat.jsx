@@ -12,7 +12,7 @@ async function GetSong(url){
     try {
       const response = await fetch(url);
       const data = await response.json();
-      const entier = Math.floor(1);
+      const entier = Math.floor(0);
       if (data.results && data.results[entier]) {
         const morceau = data.results[entier];
         setTrack(morceau);
