@@ -129,6 +129,12 @@ export function getGenreIdByName(name: string): string | undefined {
   return undefined;
 }
 
+export function getThreeMostPopular(map : Map<string, Artiste | Genre>){
+  const elements = Array.from(map.values());
+  elements.sort((a, b) => b.score - a.score);
+  return elements.slice(0, 3).map(element => element.nom);
+}
+
 export const listeArtistes = new Map<string, Artiste>();
 export const listeGenres = new Map<string, Genre>();
 export const playlist = new Map<string, Musique>();
