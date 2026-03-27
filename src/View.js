@@ -55,7 +55,8 @@ function View() {
   if (!currentUrl) return <div>Chargement du nouveau mix...</div>;
 
 
-  function onFinish(){
+  function onFinish({audio}){
+    audio.pause();
     setScreen('playlist');
   }
 
@@ -63,7 +64,8 @@ function View() {
     setScreen('discover');
   }
 
-  function onRestart(){
+  function onRestart({audio}){
+    audio.pause();
     setLikes(0);
     setCurrentIndex(0);
     setScreen("discover");
@@ -88,7 +90,7 @@ function View() {
           <PagePrincipale 
             count={likes} 
             handleAction={(like, track) => passerALaSuivante(like, track, currentUrl)}
-            onFinish={() => setScreen('playlist')}
+            onFinish={onFinish}
             url={currentUrl}
             track={track}        
             setTrack={setTrack}

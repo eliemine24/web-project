@@ -187,8 +187,8 @@
   width: 80%;
   max-height: 30%;    
   overflow-y: auto;
-  margin-top: 20%;  /* 👈 Espace vide en bas du cadre blanc */
-  margin-bottom : 5%;
+  margin-top: 26%;  /* 👈 Espace vide en bas du cadre blanc */
+  margin-bottom : 3%;
   border-radius: 0;
   background: #eeeeee; 
   padding: 5px;        

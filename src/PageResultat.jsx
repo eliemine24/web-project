@@ -27,12 +27,18 @@ async function GetSong(selectedTrack){
       setIsPlaying(false);
     }
   }
+
+function pauseMusique(){
+    audio.pause();
+  }
+
+  
   
   return(
     <div className="Container">
       <h1>playlist</h1>
       {count > 0 && (<MyButton couleur="#24292e" symbole="⚙️" top = "8%"  right="5%" onClick={getParam}/>)}
-      {count > 0 && (<MyButton couleur="#24292e" symbole="⟳" top = "8%" left="5%" onClick={onRestart}/>)}
+      {count > 0 && (<MyButton couleur="#24292e" symbole="⟳" top = "8%" left="5%" onClick={() => onRestart({audio})}/>)}
       <div className="Music-Card">
         {track && (
         <>
@@ -47,7 +53,7 @@ async function GetSong(selectedTrack){
         </div></>)}
       </div>
       <MyButton couleur="#24292e" symbole="⏭" top= "34%" right="12%"/>  
-      <MyButton couleur="#24292e" symbole="⏸" top="34%" left="12%"/> 
+      <MyButton couleur="#24292e" symbole="⏸" top="34%" left="12%" onClick={pauseMusique}/> 
       <div className="Playlist-Scroll">
         <ListMusic playMusique = {GetSong}/>
       </div>
