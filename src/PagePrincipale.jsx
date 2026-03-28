@@ -51,7 +51,7 @@ export function PagePrincipale({count, handleAction, onFinish, url}){
         <div className="Music-Info">
           <h2>{track.trackName}</h2>
           <p>{track.artistName}</p>
-          <p class="genre">{track.primaryGenreName}</p>
+          <p className="genre">{track.primaryGenreName}</p>
         </div>
         </>)}
       </div>
