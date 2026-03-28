@@ -1,7 +1,7 @@
 import {playlist} from './Model.tsx';
 import './View.css';
 
-export function ListMusic() {
+export function ListMusic({playMusique}) {
   const musiquesArray = Array.from(playlist.values());
   return (
     <div className="Playlist-Tracklist">
@@ -11,15 +11,16 @@ export function ListMusic() {
           index={index + 1} // Pour afficher 1, 2, 3...
           nom={musique.nom} 
           artiste={musique.nomArtiste} 
+          playMusique = {playMusique}
         />
       ))}
     </div>
   );
 }
 
-function TrackRow({ index, nom, artiste, onClick }) {
+function TrackRow({ index, nom, artiste, playMusique }) {
   return (
-    <div className="Track-Row" onClick={onClick}>
+    <div className="Track-Row" onClick={() => playMusique(index-1)}>
 
       <span className="Track-Number">{index}</span>
       

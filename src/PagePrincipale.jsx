@@ -57,7 +57,7 @@ export function PagePrincipale({count, handleAction, onFinish, url}){
       </div>
       <MyButton couleur="#ff4458" symbole="❤︎" top="75%" right="8%" onClick={() => track && handleAction(true, track)}/>  
       <MyButton couleur="#24292e" symbole="✗" top="75%" left="8%" onClick={() => track && handleAction(false, track)}/> 
-      {count > 0 && (<ButtonTerm onClick={onFinish}/>)}
+      {count > 0 && (<ButtonTerm onClick={() => onFinish({audio})}/>)} 
     </div>
     )
 }

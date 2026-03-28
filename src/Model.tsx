@@ -19,7 +19,8 @@ interface Genre {
  */
 interface Musique {
   nom : string,
-  nomArtiste : string
+  nomArtiste : string,
+  url : any
 }
 
 interface Track {
@@ -74,7 +75,7 @@ export function addgenre(id : string, genre : Genre){
  * @param musique 
  */
 export function addMusic(id : string, musique : Musique){
-  playlist.set(id, {nom : musique.nom, nomArtiste : musique.nomArtiste});
+  playlist.set(id, {nom : musique.nom, nomArtiste : musique.nomArtiste, url : musique.url});
 }
 
 /**

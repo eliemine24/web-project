@@ -27,7 +27,7 @@ function View() {
 
   const currentUrl = urlsPool[currentIndex];
 
-  function passerALaSuivante(estUnLike, track) {
+  function passerALaSuivante(estUnLike, track, url) {
     if (!track) return;
     joue.set(track.trackId.toString(), { id: track.trackId.toString() });
     setTrack(null);
@@ -35,7 +35,8 @@ function View() {
     if (estUnLike) {
       setLikes(likes + 1);
       addMusic(track.trackId, {nom : track.trackName,
-                               nomArtiste : track.artistName});
+                               nomArtiste : track.artistName, 
+                               url : track});
       RetourUtilisateur(true, track.artistName, track.artistId, genreId)
     }
     if(!estUnLike){
@@ -53,7 +54,8 @@ function View() {
   if (!currentUrl) return <div>Chargement du nouveau mix...</div>;
 
 
-  function onFinish(){
+  function onFinish({audio}){
+    audio.pause();
     setScreen('playlist');
   }
 
@@ -61,7 +63,8 @@ function View() {
     setScreen('discover');
   }
 
-  function onRestart(){
+  function onRestart({audio}){
+    audio.pause();
     setLikes(0);
     setCurrentIndex(0);
     setScreen("discover");
@@ -85,8 +88,8 @@ function View() {
         {screen === 'discover' && (
           <PagePrincipale 
             count={likes} 
-            handleAction={(like, track) => passerALaSuivante(like, track)}
-            onFinish={() => setScreen('playlist')}
+            handleAction={(like, track) => passerALaSuivante(like, track, currentUrl)}
+            onFinish={onFinish}
             url={currentUrl}
             track={track}        
             setTrack={setTrack}
@@ -97,6 +100,7 @@ function View() {
           <PageResultat
             count={likes}
             onRestart={onRestart}
+            getParam={getParam}
           />
         )}
       </header>
