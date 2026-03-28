@@ -107,7 +107,7 @@
   -webkit-box-orient: vertical;  
   overflow: hidden;}
 
-.Music-Info p.genre { color: #666; margin : 0; font-size: 0.9rem; white-space: normal; 
+.Music-Info p.genre { color: #666; margin-top : -8%; font-size: 0.9rem; white-space: normal; 
   word-wrap: break-word;}
 
 @keyframes defilement-spotify {
