@@ -5,6 +5,7 @@ import { addMusic, getGenreIdByName, joue, uploadGenres} from './Model.tsx';
 import { PageInitiale } from './PageInitiale.jsx';
 import { PagePrincipale } from './PagePrincipale.jsx';
 import { PageResultat } from './PageResultat.jsx';
+import { PageStats } from './PageStats.jsx';
 
 function View() {
   const [screen, setScreen] = useState('init');
@@ -70,6 +71,10 @@ function View() {
     setScreen("discover");
     chargerNouveauPaquet();
   }
+
+  function onStats(){
+    setScreen('stats')
+  }
   
   function getParam(){
     setScreen("parameter")
@@ -100,7 +105,13 @@ function View() {
           <PageResultat
             count={likes}
             onRestart={onRestart}
-            getParam={getParam}
+            onStats={onStats}
+          />
+        )}
+
+        {screen === 'stats' && (
+          <PageStats
+            onFinish={onFinish}
           />
         )}
       </header>
