@@ -1,0 +1,378 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+
+.Container {
+  background-color: #ffffff;
+  color: black;
+  height: 90vh; 
+  max-height: 800px;
+  aspect-ratio: 9 / 16;             
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto; 
+  border-radius: 20px; 
+  overflow: hidden;
+}
+
+.Container h1 {
+  font-size : 1.8rem;
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 20px;
+}
+
+.Mon-bouton {
+  position: absolute;  
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  color: white;
+  font-size : 1.6rem;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.Mon-bouton:hover {
+  filter: brightness(0.95) saturate(95%);
+  transform: scale(1.1);
+}
+
+.Compteur {
+  position: absolute;
+  top: 14%;
+  right: 8%;
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 0.9rem;
+}
+
+.Music-Card {
+  position : relative;
+  width: 60%;
+  height: 30%; 
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: #f9f9f9;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  margin-top: 16%; 
+}
+
+.Music-Info {
+  width: 100%;       
+  overflow: hidden;  
+  white-space: nowrap; 
+  position: relative;
+  margin-top: 5px;  /* Espace sous l'image */
+}
+
+.Music-Info h2 { 
+  overflow: hidden; /* Cache le texte qui sort du cadre */
+  white-space: nowrap; /* Empêche le texte d'aller à la ligne */
+  margin: 0; 
+  font-size: 1.4rem; 
+  transition: transform 0.5s ease;
+  display: inline-block;}
+
+.Music-Info:hover h2 {
+  animation: defilement-spotify 15s linear infinite;
+}
+
+.Music-Info p { color: #666;  margin-top : -3%; font-size: 1.1rem; white-space: normal; 
+  word-wrap: break-word;
+  display: 
+  -webkit-box;
+  -webkit-line-clamp: 1; /* Limite à une seule ligne */
+  -webkit-box-orient: vertical;  
+  overflow: hidden;}
+
+.Music-Info p.genre { color: #666; margin-top : -8%; font-size: 0.9rem; white-space: normal; 
+  word-wrap: break-word;}
+
+@keyframes defilement-spotify {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-100%, 0);
+  }
+}
+
+.Bouton-Terminer {
+  position: absolute;
+  left : 50%;
+  transform: translateX(-50%); /*on centre*/
+  width: 180px; 
+  height: 35px;  
+  border-radius: 20px; 
+  background-color: transparent; 
+  color: #24292e; 
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  font-size: 0.85rem;
+  border: 1px solid #24292e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.Bouton-Terminer:hover {
+  filter: brightness(0.95) saturate(95%);
+  transform: translateX(-50%) scale(1.1);
+}
+
+.Bouton-Musique{
+  height: 30px;
+  background-color: #a9afce; 
+  border: none;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.Playlist-Scroll {
+  width: 80%;
+  max-height: 30%;    
+  overflow-y: auto;
+  margin-top: 30%;  
+  margin-bottom : 3%;
+  border-radius: 0;
+  background: #eeeeee; 
+  padding: 5px;        
+  border: none;
+}
+
+/* --- Conteneur Tracklist (Inchangé mais nettoyé) --- */
+.Playlist-Tracklist {
+  width: 100%; /* Prend toute la largeur de Playlist-Scroll */
+  margin: 0 auto;
+  padding: 0;
+}
+
+.Track-Info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  text-align: left;   
+  align-items: flex-start; 
+}
+
+/* --- Une Rangée de Track (Totalement Modifiée pour le style épuré) --- */
+.Track-Row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 4px 8px;     
+  border-radius: 0;
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+  color: black; 
+  border-bottom: 1px solid #e5e5e5; 
+}
+
+/* Effet de survol sur la bande (on change la couleur des textes enfants) */
+.Track-Row:hover {
+  background-color: rgba(0, 0, 0, 0.08); /* Gris un peu plus prononcé */
+}
+
+/* Le numéro devient plus blanc */
+.Track-Row:hover .Track-Number {
+  color: #666; 
+}
+
+/* Le titre devient noir pur (ou blanc si ton fond était sombre) */
+.Track-Row:hover .Track-Title {
+  color: #000;
+}
+
+/* L'artiste s'éclaircit aussi */
+.Track-Row:hover .Track-Artist {
+  color: #444;
+}
+
+.Track-Number {
+  width: 20px;       
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.8rem;  
+  color: #999; 
+  text-align: left;
+  margin-right: 10px;
+}
+
+.Track-Title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;  
+  font-weight: 600; 
+  color: #24292e;
+  margin-bottom: 0;     
+  }
+
+.Track-Artist {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.75rem;   
+  color: #777;
+}
+
+.Bouton-Start{
+  position: absolute;
+  top :53%;
+  left :50%;
+  transform: translateX(-50%); /*on centre*/
+  width: 30%; 
+  height: 7%; 
+  border-radius: 15px; 
+  background-color: black; 
+  color: white; 
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  font-size: 0.85rem;
+  border: 1px solid #24292e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.Bouton-Start:hover {
+  filter: brightness(0.95) saturate(95%);
+  transform: translateX(-50%) scale(1.1);
+}
+
+.Title{
+  position: absolute;
+  top : 35%;
+  height : 20%;
+  color :#492f72;
+  font-family: 'Brush Script MT';
+  font-size: 6rem;
+  font-weight: bold;
+}
+
+.horizontal-scroll {
+  position : absolute;
+  top : 5%;
+  left : 0;
+  display: flex;
+  width: 100%;
+  height: 30%;
+  overflow: hidden;      
+  position: relative;
+  gap: 5%;
+}
+
+.horizontal-scroll-bis {
+  position : absolute;
+  top : 35%;
+  right : 0;
+  display: flex;
+  width: 100%;
+  height: 30%;
+  overflow: hidden;      
+  position: relative;
+  gap: 5%;
+}
+
+
+.horizontal-scroll-item {
+  flex-shrink: 0;      
+  height: 100%;
+  width: 50%;          
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  animation-name: infiniteScroll;  
+  animation-duration: 30s; 
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.horizontal-scroll-item-bis {
+  flex-shrink: 0;      
+  height: 100%;
+  width: 50%;          
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  animation-name: infiniteScroll-bis;  
+  animation-duration: 30s; 
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes infiniteScroll {
+	from {transform: translateX(0) }
+	to {transform: translateX(calc(0px - 550%));}
+}
+@keyframes infiniteScroll-bis {
+	from {transform: translateX(calc(0px - 550%)) }
+	to {transform: translateX(0);}
+}
+
+.item-1 {
+  background-image: url("https://static.qobuz.com/images/covers/63/82/0634904078263_org.jpg");
+}
+
+.item-2 {
+  background-image: url("https://static.qobuz.com/images/covers/dc/dw/diw20eg0udwdc_org.jpg");
+}
+
+.item-3 {
+  background-image: url("https://static.qobuz.com/images/covers/0a/qo/r72kxg9ifqo0a_org.jpg");
+}
+
+.item-4 {
+  background-image: url("https://static.qobuz.com/images/covers/da/bt/lsre70zcubtda_org.jpg");
+}
+
+.item-5 {
+  background-image: url("https://static.qobuz.com/images/covers/fb/5f/lbfmigsz25ffb_org.jpg");
+}
+
+.item-6 {
+  background-image: url("https://static.qobuz.com/images/covers/1a/yo/j4b9vhzp8yo1a_org.jpg");
+}
+
+.item-7 {
+  background-image: url("https://static.qobuz.com/images/covers/44/80/0190295978044_org.jpg");
+}
+
+.item-8 {
+  background-image: url("https://static.qobuz.com/images/covers/ca/so/pqhhevy01soca_org.jpg");
+}
+
+.item-9 {
+  background-image: url("https://static.qobuz.com/images/covers/34/06/3700368460634_org.jpg");
+}
+
+.item-10 {
+  background-image: url("https://static.qobuz.com/images/covers/xa/77/szepb9zpw77xa_org.jpg");
+}
+
