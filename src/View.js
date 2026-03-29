@@ -37,7 +37,8 @@ function View() {
       setLikes(likes + 1);
       addMusic(track.trackId, {nom : track.trackName,
                                nomArtiste : track.artistName, 
-                               url : track});
+                               url : track,
+                               genre : track.primaryGenreName});
       RetourUtilisateur(true, track.artistName, track.artistId, genreId)
     }
     if(!estUnLike){

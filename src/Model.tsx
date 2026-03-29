@@ -20,7 +20,8 @@ interface Genre {
 interface Musique {
   nom : string,
   nomArtiste : string,
-  url : any
+  url : any,
+  genre : string
 }
 
 interface Track {
@@ -75,7 +76,7 @@ export function addgenre(id : string, genre : Genre){
  * @param musique 
  */
 export function addMusic(id : string, musique : Musique){
-  playlist.set(id, {nom : musique.nom, nomArtiste : musique.nomArtiste, url : musique.url});
+  playlist.set(id, {nom : musique.nom, nomArtiste : musique.nomArtiste, url : musique.url, genre : musique.genre});
 }
 
 /**
@@ -130,10 +131,22 @@ export function getGenreIdByName(name: string): string | undefined {
   return undefined;
 }
 
-export function getThreeMostPopular(map : Map<string, Artiste | Genre>){
-  const elements = Array.from(map.values());
-  elements.sort((a, b) => b.score - a.score);
-  return elements.slice(0, 3).map(element => element.nom);
+export function getThreeMostPopular(type: 'genre' | 'artiste'): string[] {
+  const counts = new Map<string, number>();
+
+  // On parcourt la playlist pour compter les occurrences
+  for (const musique of playlist.values()) {
+    const valeur = type === 'genre' ? musique.genre : musique.nomArtiste;
+    
+    if (valeur) {
+      counts.set(valeur, (counts.get(valeur) || 0) + 1);
+    }
+  }
+  // On transforme la Map en tableau, on trie par nombre d'apparition et on prend les 3 premiers noms
+  return Array.from(counts.entries())
+    .sort((a, b) => b[1] - a[1]) // Tri décroissant sur le compteur (index 1)
+    .slice(0, 3)
+    .map(entry => entry[0]); // On retourne la clé (index 0)
 }
 
 export const listeArtistes = new Map<string, Artiste>();

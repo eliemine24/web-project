@@ -211,14 +211,14 @@ export function RetourUtilisateur(like, nomArtiste, artistId, genreId){
     /* modifie les objets mapArtistes et mapGenres pour changer le score du genre et celui de 
     l'artiste en fonction de si l'utilisateur a liké ou pas */
     if (like === true){
-        /* on met +1 pour l'artiste et le genre */
-        updateGenreScore(genreId, 1);
-        updateArtistScore(artistId, 1, nomArtiste);
+        /* on met +10 pour l'artiste et le genre */
+        updateGenreScore(genreId, 10);
+        updateArtistScore(artistId, 10, nomArtiste);
     }
     else{
-        /* on met -1 pour l'artiste et le genre */
-        updateGenreScore(genreId, -1);
-        updateArtistScore(artistId, -1, nomArtiste);
+        /* on met -3 pour l'artiste et le genre */
+        updateGenreScore(genreId, -3);
+        updateArtistScore(artistId, -3, nomArtiste);
     }
 
 }

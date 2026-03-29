@@ -1,12 +1,10 @@
 import './View.css';
 import { MyButton } from './MyButton.jsx';
-import {listeArtistes,listeGenres} from './Model.tsx'
+import { getThreeMostPopular } from './Model.tsx';
 
 export function PageStats({onFinish}){
-  /* On commence par trier les listes  */
-  const topArtists = [...listeArtistes.entries()].sort((a, b) => b[1].score - a[1].score).slice(0,3);
-
-  const topGenres = [...listeGenres.entries()].sort((a,b) => b[1].score - a[1].score).slice(0,3); 
+  const topArtists = getThreeMostPopular('nomArtiste');
+  const topGenres = getThreeMostPopular('genre');
 
   return(
     <div className="Container" color='#ffffff'>
@@ -14,19 +12,26 @@ export function PageStats({onFinish}){
         <h2><br></br>Top 3</h2>
         <div>
         <h1>Artistes</h1>
-        {topArtists.map(([id, artiste], index) => (
-          <div key={id}>
-            {index + 1} : {artiste.nom}
-          </div>
-        ))}
+          {topArtists.length > 0 ? (
+            topArtists.map((nom, index) => (
+              <div key={nom}>
+                {index + 1} : {nom}
+              </div>
+            ))) : (
+          <p>Pas encore d'artistes</p>
+        )}
         </div>
         <div>
         <h1>Genres</h1>
-        {topGenres.map(([id, genre], index) => (
-          <div key={id}>
-            {index + 1} : {genre.nom}
-          </div>
-        ))}
+        {topGenres.length > 0 ? (
+          topGenres.map((nom, index) => (
+            <div key={nom}>
+              {index + 1} : {nom}
+            </div>
+          ))
+        ) : (
+          <p>Pas encore de genres</p>
+        )}
       </div>
     </div>
     )
