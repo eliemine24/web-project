@@ -12,7 +12,7 @@ export function PageStats({onFinish}){
     <div className="Container" color='#ffffff'>
         <MyButton couleur="#24292e" symbole=" ←" top = "8%" left="5%" onClick={onFinish}/>
         <h2><br></br>Top 3</h2>
-        <div className="Playlist-Scroll">
+        <div>
         <h1>Artistes</h1>
         {topArtists.map(([id, artiste], index) => (
           <div key={id}>
@@ -20,7 +20,7 @@ export function PageStats({onFinish}){
           </div>
         ))}
         </div>
-        <div className='Playlist-scroll'>
+        <div>
         <h1>Genres</h1>
         {topGenres.map(([id, genre], index) => (
           <div key={id}>

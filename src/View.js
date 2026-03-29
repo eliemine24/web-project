@@ -55,8 +55,8 @@ function View() {
   if (!currentUrl) return <div>Chargement du nouveau mix...</div>;
 
 
-  function onFinish({audio}){
-    audio.pause();
+  function onFinish({audio}={}){
+    audio?.pause();
     setScreen('playlist');
   }
 
