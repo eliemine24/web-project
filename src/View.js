@@ -72,7 +72,8 @@ function View() {
     chargerNouveauPaquet();
   }
 
-  function onStats(){
+  function onStats({audio}){
+    audio.pause();
     setScreen('stats')
   }
   

@@ -44,7 +44,7 @@ function pauseMusique(){
   return(
     <div className="Container">
       <h1>playlist</h1>
-      {count > 0 && (<MyButton couleur="#24292e" symbole="⚙️" top = "8%"  right="5%" onClick={onStats}/>)}
+      {count > 0 && (<MyButton couleur="#24292e" symbole="⚙️" top = "8%"  right="5%" onClick={() => onStats({audio})}/>)}
       {count > 0 && (<MyButton couleur="#24292e" symbole="⟳" top = "8%" left="5%" onClick={() => onRestart({audio})}/>)}
       <div className="Music-Card">
         {track && (
